@@ -25,6 +25,7 @@ router.post('/' , async (req, res) => {
         res.header('x-auth-token', token).status(201).send(user);
     } catch (e) {
         res.status(400).send(e);
+        console.log(e)
     }
 })
 
