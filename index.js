@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 4000;
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/Dummy';
 const path = require('path');
 const mongoose  = require('mongoose');
 const users = require('./routes/user');
@@ -20,13 +21,13 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-mongoose.connect('mongodb://localhost/Dummy',{
+mongoose.connect(mongoUri,{
      useNewUrlParser: true,
      useUnifiedTopology: true,
      useCreateIndex : true,
      useFindAndModify: false
 })
-.then(()=>{console.log("Connected to mongoDB")})
+.then(()=>{console.log(`Connected to mongoDB and connecting to ${mongoUri}`)})
 .catch(()=>{console.log("Connection failed")})
 
 app.listen(port, () => {
