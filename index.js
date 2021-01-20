@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const port = process.env.PORT || 4000;
 const mongoose  = require('mongoose');
 const users = require('./routes/user');
 const tasks = require('./routes/task');
@@ -20,6 +21,6 @@ mongoose.connect('mongodb://localhost/Dummy',{
 .then(()=>{console.log("Connected to mongoDB")})
 .catch(()=>{console.log("Connection failed")})
 
-app.listen(4000, () => {
-    console.log("Server is up and running on PORT : 4000")
+app.listen(port, () => {
+    console.log(`Server is up and running on PORT ${port}`)
 })
