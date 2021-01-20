@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
+const mongoUri = process.env.MONGODB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/Dummy';
 const port = process.env.PORT || 4000;
-const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/Dummy';
 const path = require('path');
 const mongoose  = require('mongoose');
 const users = require('./routes/user');
