@@ -4,7 +4,7 @@ import { addTask,getTasks, updateTask,removeTask ,toggleTask} from "../actions";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-const Tasks = ({ users, toggleTask, tasks }) => {
+const Tasks = (props) => {
   // const b = tasks.map(a => a.completed)
   // console.log( typeof b)
   // const [ status,  setStatus ] = useState(b)
@@ -17,16 +17,16 @@ const Tasks = ({ users, toggleTask, tasks }) => {
   //       localStorage.setItem("x-auth-token", "");
   //       token = "";
   //     }
-  const token = users.token;
+ 
   useEffect(() => {
-    dispatch(getTasks(token));
-  }, []);
+    dispatch(getTasks(props.users.token));
+  }, [dispatch ,props.users.token]);
 
   let input = React.createRef();
   const handleOnsubmit = (e) => {
     e.preventDefault();
     const task = input.current.value;
-    dispatch(addTask(task, token));
+    dispatch(addTask(task, props.users.token));
   };
 
   let value;
@@ -35,25 +35,25 @@ const Tasks = ({ users, toggleTask, tasks }) => {
   };
   const handleUpdate = (task) => {
     task.description = value;
-    dispatch(updateTask(task, token));
+    dispatch(updateTask(task, props.users.token));
   };
 
   const handleRemove = async (task) => {
-    dispatch(removeTask(task._id, token));
+    dispatch(removeTask(task._id, props.users.token));
   };
 
   return (
     <div className="container">
-      {!token && (
+      {!props.users.token && (
         <React.Fragment>
           <Redirect to="/not-found" />
         </React.Fragment>
       )}
 
-      {token && (
+      {props.users.token && (
         <React.Fragment>
           <div className="m-5">
-            <h1> Welcome {users.user.name}..! </h1>
+            <h1> Welcome {props.users.user.name}..! </h1>
             <h5> Now You Can Add Your Tasks... Here </h5>
           </div>
           <form onSubmit={handleOnsubmit}>
@@ -69,7 +69,7 @@ const Tasks = ({ users, toggleTask, tasks }) => {
 
           <div className="container col-10">
             <ul className="list-group">
-              {tasks.map((task) => (
+              {props.tasks.map((task) => (
                 <li className="list-group-item" key={task._id}>
                   {task.description}
 
