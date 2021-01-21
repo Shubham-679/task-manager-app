@@ -42,8 +42,6 @@ export const logoutUser = (token) => async (dispatch) => {
 };
 
 export const updateUser = (values, token) => async (dispatch) => {
-  console.log(values)
-  console.log(token)
   const  { data : user } = await axios.patch("/users/me", values, {
     headers: {
       "x-auth-token": token
