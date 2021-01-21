@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import {  useDispatch } from "react-redux";
 import { addTask,getTasks, updateTask,removeTask ,toggleTask} from "../actions";
 import { connect } from "react-redux";
@@ -18,7 +18,7 @@ const Tasks = (props) => {
   //       token = "";
   //     }
  
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(getTasks(props.users.token));
   }, [dispatch ,props.users.token]);
 
