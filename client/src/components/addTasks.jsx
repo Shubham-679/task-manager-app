@@ -20,7 +20,7 @@ const Tasks = ({ users, toggleTask, tasks }) => {
   const token = users.token;
   useEffect(() => {
     dispatch(getTasks(token));
-  }, [dispatch, token, users]);
+  }, []);
 
   let input = React.createRef();
   const handleOnsubmit = (e) => {
