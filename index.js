@@ -21,20 +21,11 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// mongoose.connect(process.env.mongoUri,{
-//      useNewUrlParser: true,
-//      useUnifiedTopology: true,
-//      useCreateIndex : true,
-//      useFindAndModify: false
-// })
-// .then(()=>{console.log(`Connected to mongoDB`)})
-// .catch(()=>{console.log(`Connection failed`)})
-
-mongoose.connect('mongodb://localhost/Dummy' ,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex : true,
-  useFindAndModify: false
+mongoose.connect(process.env.mongoUri,{
+     useNewUrlParser: true,
+     useUnifiedTopology: true,
+     useCreateIndex : true,
+     useFindAndModify: false
 })
 .then(()=>{console.log(`Connected to mongoDB`)})
 .catch(()=>{console.log(`Connection failed`)})
