@@ -1,5 +1,3 @@
-
-
 import { createStore , applyMiddleware , compose } from 'redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -17,9 +15,7 @@ const persistConfig = {
 const pReducer = persistReducer(persistConfig, combineReducers);
 
 
-const store = createStore( pReducer, compose(
-    applyMiddleware(thunk)
-    ))
+const store = createStore( pReducer,applyMiddleware(thunk))
 
 
 const persistor = persistStore(store);
