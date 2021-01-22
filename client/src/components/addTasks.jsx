@@ -5,24 +5,24 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 const Tasks = (props) => {
-  
+
   const dispatch = useDispatch();
 
-  // let token = localStorage.getItem("x-auth-token");
-  //     if(token === null){
-  //       localStorage.setItem("x-auth-token", "");
-  //       token = "";
-  //     }
+  let token = localStorage.getItem("x-auth-token");
+      if(token === null){
+        localStorage.setItem("x-auth-token", "");
+        token = "";
+      }
  
   useEffect(() => {
-    dispatch(getTasks(props.users.token));
-  }, [dispatch ,props.users.token]);
+    dispatch(getTasks(token));
+  }, [dispatch ,token]);
 
   let input = React.createRef();
   const handleOnsubmit = (e) => {
     e.preventDefault();
     const task = input.current.value;
-    dispatch(addTask(task, props.users.token));
+    dispatch(addTask(task, token));
   };
 
   let value;
@@ -31,22 +31,22 @@ const Tasks = (props) => {
   };
   const handleUpdate = (task) => {
     task.description = value;
-    dispatch(updateTask(task, props.users.token));
+    dispatch(updateTask(task, token));
   };
 
   const handleRemove = async (task) => {
-    dispatch(removeTask(task._id, props.users.token));
+    dispatch(removeTask(task._id, token));
   };
 
   return (
     <div className="container">
-      {!props.users.token && (
+      {!token && (
         <React.Fragment>
           <Redirect to="/not-found" />
         </React.Fragment>
       )}
 
-      {props.users.token && (
+      {token && (
         <React.Fragment>
           <div className="m-5">
             <h1> Welcome {props.users.user.name}..! </h1>

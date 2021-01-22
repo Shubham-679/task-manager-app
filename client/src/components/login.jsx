@@ -30,9 +30,9 @@ const Login = (props) => {
     dispatch(findUser(values))
     .then((res)=>{    
       toast.success("Login Success");
-      // localStorage.setItem("x-auth-token",res.token);
-      // window.location = "/tasks";
-      <Redirect to="/tasks"/>
+      localStorage.setItem("x-auth-token",res.token);
+      window.location = "/tasks";
+      // <Redirect to="/tasks"/>
 
     })
     .catch((e)=>{
