@@ -29,7 +29,7 @@ const Login = (props) => {
     .then((res)=>{    
       toast.success("Login Success");
       localStorage.setItem("x-auth-token",res.token);
-      window.location = "/#/tasks";
+      window.location = "/tasks";
       // <Redirect to="/tasks"/>
       // props.history.replace('/#/tasks');
 
