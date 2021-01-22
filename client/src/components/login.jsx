@@ -31,7 +31,7 @@ const Login = (props) => {
       localStorage.setItem("x-auth-token",res.token);
       // window.location = "/#/tasks";
       // <Redirect to="/tasks"/>
-      props.history.replace('/tasks');
+      props.history.replace('/#/tasks');
 
     })
     .catch((e)=>{
