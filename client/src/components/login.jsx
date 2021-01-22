@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {  findUser } from "../actions";
 import { toast } from "react-toastify";
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -30,7 +31,9 @@ const Login = (props) => {
     .then((res)=>{    
       toast.success("Login Success");
       // localStorage.setItem("x-auth-token",res.token);
-      window.location = "/tasks";
+      // window.location = "/tasks";
+      <Redirect to="/tasks"/>
+
     })
     .catch((e)=>{
       toast.error("Email or Password Are Invalid !");
