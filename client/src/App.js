@@ -1,4 +1,4 @@
-import { Route, Switch,Redirect } from 'react-router-dom';
+import { Route, Switch,Redirect,Router } from 'react-router-dom';
 import { ToastContainer} from 'react-toastify';
 import Navbar from "./components/navbar";
 import Home from './components/home';
@@ -20,6 +20,7 @@ function App() {
     <div className="App">
       <ToastContainer/>
       <Navbar/>
+      
       <Switch>
       <Route path="/home" component={Home} />
       <Route path="/login" component={Login} />
@@ -32,6 +33,7 @@ function App() {
       <Redirect from="/"  exact to="/home" />
       <Redirect to="/not-found"/>
       </Switch>
+    
     </div>
   );
 }

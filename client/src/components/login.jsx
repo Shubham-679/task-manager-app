@@ -1,4 +1,4 @@
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import React, { useState } from "react";
 import {  findUser } from "../actions";
@@ -22,16 +22,13 @@ const Login = (props) => {
       [name]: value,
     });
   };
-
   const handleSubmit =  (e) => {
     e.preventDefault();
     dispatch(findUser(values))
     .then((res)=>{    
       toast.success("Login Success");
       localStorage.setItem("x-auth-token",res.token);
-      window.location = "/tasks";
-      // <Redirect to="/tasks"/>
-      // props.history.replace('/#/tasks');
+      window.location = "/"
 
     })
     .catch((e)=>{

@@ -20,13 +20,13 @@ store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
   <React.StrictMode>
-    <HashRouter>
       <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+      <HashRouter>
          <App/>
+    </HashRouter>
          </PersistGate>
       </Provider>
-    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

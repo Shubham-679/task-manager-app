@@ -1,6 +1,6 @@
 import { Redirect } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions";
 
 
@@ -15,7 +15,7 @@ const Tasks = (props) => {
   useEffect(() => {
     console.log("in effect",token)
     dispatch(getTasks(token));
-  }, [dispatch ,token]);
+  }, [dispatch]);
 
   let input = React.createRef();
   const handleOnsubmit = (e) => {
