@@ -1,16 +1,21 @@
 import { Redirect } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions";
 
 
+
+const token = localStorage.getItem("x-auth-token");
+console.log("above method",token)
 const Tasks = (props) => {
 
   const dispatch = useDispatch();
-
-  const token = localStorage.getItem("x-auth-token");
+  
+  
+  
 
   useEffect(() => {
+    console.log("in effect",token)
     dispatch(getTasks(token));
   }, [dispatch ,token]);
 

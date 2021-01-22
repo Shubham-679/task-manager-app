@@ -22,6 +22,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 // 'mongodb://localhost/Dummy'
+// process.env.mongoUri
 mongoose.connect(process.env.mongoUri,{
      useNewUrlParser: true,
      useUnifiedTopology: true,
