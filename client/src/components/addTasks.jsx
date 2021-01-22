@@ -8,12 +8,8 @@ const Tasks = (props) => {
 
   const dispatch = useDispatch();
 
-  let token = localStorage.getItem("x-auth-token");
-      if(token === null){
-        localStorage.setItem("x-auth-token", "");
-        token = "";
-      }
- 
+  const token = localStorage.getItem("x-auth-token");
+
   useEffect(() => {
     dispatch(getTasks(token));
   }, [dispatch ,token]);
