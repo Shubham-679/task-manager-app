@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import {  useDispatch } from "react-redux";
-import { addTask,getTasks, updateTask,removeTask ,toggleTask} from "../actions";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions";
+
 
 const Tasks = (props) => {
 

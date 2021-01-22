@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {  findUser } from "../actions";
 import { toast } from "react-toastify";
-import { Redirect } from 'react-router-dom';
-
-
 
 const initialValues = {
   email: "",

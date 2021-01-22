@@ -1,11 +1,11 @@
 const express = require('express');
+const mongoose  = require('mongoose');
 const app = express();
+const cors = require('cors');
 const port = process.env.PORT || 3000;
 const path = require('path');
-const mongoose  = require('mongoose');
 const users = require('./routes/user');
 const tasks = require('./routes/task');
-const cors = require('cors');
 require('dotenv/config');
 
 app.use(cors());
@@ -17,11 +17,11 @@ app.use('/public', express.static('public'));
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-
-mongoose.connect(process.env.mongoUri,{
+// 'mongodb://localhost/Dummy'
+mongoose.connect(mongoUri,{
      useNewUrlParser: true,
      useUnifiedTopology: true,
      useCreateIndex : true,

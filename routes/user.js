@@ -80,7 +80,7 @@ router.patch('/me', auth, async(req, res)=>{
 router.delete('/me',auth,  async (req, res)=>{
 
     try {
-        console.log("inside delete method")
+   
         // const user = await User.findByIdAndDelete(req.user._id)
         // if(!user){
         //     res.status(404).send('user not found')
@@ -88,9 +88,7 @@ router.delete('/me',auth,  async (req, res)=>{
         // res.send(user)
         await req.user.remove()
         res.send(req.user)
-        console.log("delete method complete")
-
-
+       
     } catch (e) {
         console.log(e)
         res.status(500).send()
