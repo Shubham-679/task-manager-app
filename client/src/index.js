@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from 'react-router-dom';
+import { HashRouter} from 'react-router-dom';
 // import {  createStore , applyMiddleware , compose } from 'redux';
 import { Provider } from 'react-redux';
 // import combineReducers from './reducers/index'
@@ -20,13 +20,13 @@ store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
          <App/>
          </PersistGate>
       </Provider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
