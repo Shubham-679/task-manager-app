@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 const path = require('path');
 const users = require('./routes/user');
 const tasks = require('./routes/task');
+
 require('dotenv/config');
 
 app.use(cors());
@@ -21,7 +22,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 // 'mongodb://localhost/Dummy'
-mongoose.connect(mongoUri,{
+mongoose.connect(process.env.mongoUri,{
      useNewUrlParser: true,
      useUnifiedTopology: true,
      useCreateIndex : true,
