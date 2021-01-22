@@ -30,8 +30,7 @@ const Login = (props) => {
     .then((res)=>{    
       toast.success("Login Success");
       // localStorage.setItem("x-auth-token",res.token);
-      props.history.replace('/tasks')
-      // window.location = "/tasks";
+      window.location = "/tasks";
     })
     .catch((e)=>{
       toast.error("Email or Password Are Invalid !");

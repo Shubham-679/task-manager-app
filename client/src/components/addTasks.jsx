@@ -1,15 +1,11 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import {  useDispatch } from "react-redux";
 import { addTask,getTasks, updateTask,removeTask ,toggleTask} from "../actions";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 const Tasks = (props) => {
-  // const b = tasks.map(a => a.completed)
-  // console.log( typeof b)
-  // const [ status,  setStatus ] = useState(b)
-
-  // const tasks = useSelector((state) => state.tasks);
+  
   const dispatch = useDispatch();
 
   // let token = localStorage.getItem("x-auth-token");
@@ -18,7 +14,7 @@ const Tasks = (props) => {
   //       token = "";
   //     }
  
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(getTasks(props.users.token));
   }, [dispatch ,props.users.token]);
 
