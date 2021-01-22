@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { Redirect } from 'react-router-dom';
 import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import {  findUser } from "../actions";
 import { toast } from "react-toastify";
 
@@ -28,8 +29,8 @@ const Login = (props) => {
     .then((res)=>{    
       toast.success("Login Success");
       localStorage.setItem("x-auth-token",res.token);
-      window.location = "/tasks";
-      // <Redirect to="/tasks"/>
+      // window.location = "/#/tasks";
+      <Redirect to="/tasks"/>
 
     })
     .catch((e)=>{
