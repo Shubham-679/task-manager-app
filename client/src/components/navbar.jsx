@@ -26,7 +26,7 @@ const Navbar = ({users}) => {
 
                                  { users.token && (
                                    <React.Fragment>
-                                <NavLink className="navbar-brand" to="/tasks">Home</NavLink>
+                                <NavLink className="nav-link" to="/tasks">Dashboard</NavLink>
                                 <NavLink className="nav-link" to="/logout">Logout</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
                                 <NavLink className="nav-link" to="/delete-account">Delete Account</NavLink>
