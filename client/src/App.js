@@ -1,4 +1,4 @@
-import { Route, Switch,Redirect,Router } from 'react-router-dom';
+import { Route, Switch,Redirect } from 'react-router-dom';
 import { ToastContainer} from 'react-toastify';
 import Navbar from "./components/navbar";
 import Home from './components/home';

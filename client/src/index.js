@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { HashRouter} from 'react-router-dom';
+import { BrowserRouter} from 'react-router-dom';
 // import {  createStore , applyMiddleware , compose } from 'redux';
 import { Provider } from 'react-redux';
 // import combineReducers from './reducers/index'
@@ -22,9 +22,9 @@ ReactDOM.render(
   <React.StrictMode>
       <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-      <HashRouter>
+      <BrowserRouter>
          <App/>
-    </HashRouter>
+    </BrowserRouter>
          </PersistGate>
       </Provider>
   </React.StrictMode>,

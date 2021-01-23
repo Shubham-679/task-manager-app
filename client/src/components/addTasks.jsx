@@ -6,11 +6,10 @@ import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions
 
 
 const token = localStorage.getItem("x-auth-token");
-console.log("above method",token)
+
 const Tasks = (props) => {
 
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
     console.log("in effect",token)
