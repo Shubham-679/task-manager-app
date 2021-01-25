@@ -22,6 +22,9 @@ const userReducer = (state = [], action) => {
         }
       case "REMOVE_USER":
         return state = []
+      
+      case "GET_USER":
+        return state = action.payload
 
     default:
       return state;

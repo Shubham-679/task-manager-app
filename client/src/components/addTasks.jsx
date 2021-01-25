@@ -6,7 +6,6 @@ import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions
 
 
 const token = localStorage.getItem("x-auth-token");
-console.log("above method",token)
 const Tasks = (props) => {
 
   const dispatch = useDispatch();
@@ -62,34 +61,45 @@ const Tasks = (props) => {
             <button className="btn btn-primary m-2">Add</button>
           </form>
 
-          <div className="container col-10">
+          <div className="container col-12">
             <ul className="list-group">
               {props.tasks.map((task) => (
-                <li className="list-group-item" key={task._id}>
+                <li className="list-group-item" key={task._id}
+                
+                >
+
+                  <div className="row">
+                    <div className="col-4">
                   {task.description}
 
-                  <div>
+                    </div>
+                  
+
+                  
+                  <div className="col-4">
                     <input
                       type="text"
                       id="update"
-                      placeholder="Update..."
+                      placeholder="Update"
                       onChange={handleChange}
-                      className="float-right m-2"
+                      className="m-2"
                     />
+
                     <button
-                      className="btn btn-warning btn-sm float-right m-2"
+                      className="btn btn-warning btn-sm"
                       onClick={() => handleUpdate(task)}
-                    >
-                      Update
+                      >Update
                     </button>
                   </div>
 
-                  <button
-                    className="btn btn-danger btn-sm float-left m-2"
-                    onClick={() => handleRemove(task)}
-                  >
-                    Remove
-                  </button>
+                  <div className="align-top text-right col-4">
+                    <i className="fa fa-trash-o" aria-hidden="true"
+                        onClick={() => handleRemove(task)}
+                        style={{ cursor: "pointer"}}
+                    />
+                </div>
+                
+                  </div>
                 </li>
               ))}
             </ul>
