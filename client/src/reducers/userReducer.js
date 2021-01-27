@@ -5,7 +5,8 @@ const userReducer = (state = [], action) => {
 
     case "FIND_USER":
       return {
-        user : action.payload,
+        token : action.payload.token,
+        user : action.payload.user,
         isAdmin : action.payload.user.isAdmin
       };
 

@@ -14,17 +14,9 @@ import Project from './components/project'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'react-toastify/dist/ReactToastify.css';
-import React, { useEffect, useState } from 'react';
-import jwtDecode from "jwt-decode";
+
 
 function App() {
-
-  // const [ admin, setAdmin] = useState({})
-  //   useEffect(()=>{
-  //       const token = localStorage.getItem("x-auth-token");
-  //       const admin = jwtDecode(token)
-  //       setAdmin({admin})
-  //   },[])
 
   return (
     <div className="App">

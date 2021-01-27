@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 const Navbar = ({users}) => {
-   const [ user, setUser] = useState()
+   console.log(users.token)
    
         return (
             <div className="container-fluid"  style={{backgroundColor : '#2d4059'}}>
@@ -17,29 +17,30 @@ const Navbar = ({users}) => {
                             <ul className="navbar-nav">
 
 
-                               { !users.token&& (
-                                   <React.Fragment>
+                                {!users.token && (
+                                <React.Fragment>
                                 <Link className="navbar-brand" to="/home">Home</Link>
                                 <NavLink className="nav-link " to="/login">Login</NavLink>
                                 <NavLink className="nav-link " to="/signup">SignUp</NavLink>
-                                </React.Fragment>)
-                                }
+                                </React.Fragment>
+                                )}
 
-                                 { users.token && (
-                                   <React.Fragment>
-                                <NavLink className="nav-link" to="/tasks">Dashboard</NavLink>
-                                <NavLink className="nav-link" to="/logout">Logout</NavLink>
+                                {users.token && users.isAdmin && (
+                                <React.Fragment>
+                                <NavLink className="nav-link" to="/addproject">Projects</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
                                 {/* <NavLink className="nav-link" to="/delete-account">Delete Account</NavLink> */}
-                                </React.Fragment>)
-                                }
-                                {/* { users.user.isAdmin === true && (
+                                <NavLink className="nav-link" to="/logout">Logout</NavLink>
+                                </React.Fragment>
+                                )}
+
+                                {users.token  && !users.isAdmin &&  (
                                 <React.Fragment>
-                                <NavLink className="nav-link" to="/addproject">Project</NavLink>
+                                <NavLink className="nav-link" to="/tasks">Tasks</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
                                 <NavLink className="nav-link" to="/logout">Logout</NavLink>
                                 </React.Fragment>
-                                )} */}
+                                )}
                                 
                             </ul>
                         </div>
