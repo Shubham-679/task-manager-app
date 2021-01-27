@@ -1,3 +1,4 @@
+import project from "../components/project";
 
 
 const projectReducer = (state = [], action) => {
@@ -16,7 +17,9 @@ const projectReducer = (state = [], action) => {
         return { project : action.payload}
 
       case "UPDATE_PROJECT":
-        return state = action.payload
+        return {
+          project : action.payload
+        }
           default:
         return state;
     }

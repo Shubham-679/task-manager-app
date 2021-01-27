@@ -1,8 +1,9 @@
-import React, {  } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 const Navbar = ({users}) => {
+   const [ user, setUser] = useState()
    
         return (
             <div className="container-fluid"  style={{backgroundColor : '#2d4059'}}>
@@ -27,13 +28,18 @@ const Navbar = ({users}) => {
                                  { users.token && (
                                    <React.Fragment>
                                 <NavLink className="nav-link" to="/tasks">Dashboard</NavLink>
-                                <NavLink className="nav-link" to="/addproject">Project</NavLink>
                                 <NavLink className="nav-link" to="/logout">Logout</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
-                                <NavLink className="nav-link" to="/delete-account">Delete Account</NavLink>
-                                
+                                {/* <NavLink className="nav-link" to="/delete-account">Delete Account</NavLink> */}
                                 </React.Fragment>)
                                 }
+                                {/* { users.user.isAdmin === true && (
+                                <React.Fragment>
+                                <NavLink className="nav-link" to="/addproject">Project</NavLink>
+                                <NavLink className="nav-link" to="/profile">Profile</NavLink>
+                                <NavLink className="nav-link" to="/logout">Logout</NavLink>
+                                </React.Fragment>
+                                )} */}
                                 
                             </ul>
                         </div>
@@ -46,4 +52,4 @@ const Navbar = ({users}) => {
         users : state.users
       })
 
-export default connect(mapStateToProps) (Navbar);
+export default connect(mapStateToProps)(Navbar);

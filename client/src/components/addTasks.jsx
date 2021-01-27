@@ -9,7 +9,6 @@ const token = localStorage.getItem("x-auth-token");
 const Tasks = (props) => {
 
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
     console.log("in effect",token)

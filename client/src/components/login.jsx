@@ -1,9 +1,8 @@
-import { Link, Redirect } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import React, { useState } from "react";
 import {  findUser } from "../actions";
 import { toast } from "react-toastify";
-
+import jwtDecode from "jwt-decode";
 const initialValues = {
   email: "",
   password: ""
@@ -28,8 +27,10 @@ const Login = (props) => {
     .then((res)=>{    
       toast.success("Login Success");
       localStorage.setItem("x-auth-token",res.token);
-      window.location = "/"
-
+      const admin = jwtDecode(res.token)
+      console.log(admin.isAdmin)
+      window.location= '/'
+      
     })
     .catch((e)=>{
       toast.error("Email or Password Are Invalid !");
@@ -38,7 +39,7 @@ const Login = (props) => {
   };
 
   return (
-    <div className="container" style={{backgroundColor : '#ffcccc'}}>
+    <div className="container">
       <h1 className="m-4"> Login Here..</h1>
       <div className="d-flex justify-content-center">
         <form onSubmit={handleSubmit}>

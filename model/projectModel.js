@@ -11,10 +11,19 @@ const projectSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  task: {
-    type: String,
-    ref: 'Task'
-  },
+  tasks : {
+    type : new mongoose.Schema({
+        task: {
+            type: String,
+            minlength: 5,
+            maxlength: 255
+          },
+          completed: { 
+            type: Boolean, 
+            default: false,
+          }   
+    }),
+},
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

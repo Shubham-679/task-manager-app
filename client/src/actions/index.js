@@ -65,38 +65,29 @@ export const getUser = () => async (dispatch) => {
 };
 
 
-export const addTask = (text, token) => async (dispatch) => {
-  const obj = {
-    description: text
-  };
+export const addTask = (obj) => async (dispatch) => {
   const {
     data: newTask
   } = await axios.post(
     "http://localhost:3000/tasks",
     obj, {
-      headers: {
-        "x-auth-token": token
-      },
     }
   );
   dispatch({
     type: "ADD_TASK",
     payload: newTask,
   });
+  console.log(newTask)
+  return newTask;
 };
 
-export const getTasks = (token) => async (dispatch) => {
-  const {
-    data: tasks
-  } = await axios.get("http://localhost:3000/tasks", {
-    headers: {
-      "x-auth-token": token
-    },
-  });
+export const getTasks = () => async (dispatch) => {
+  const {data: tasks} = await axios.get("http://localhost:3000/tasks");
   dispatch({
     type: "GET_TASKS",
     payload: tasks,
   });
+  return tasks;
 };
 
 
@@ -195,8 +186,9 @@ export const updateProject = (values) => async (dispatch) => {
   });
   dispatch({
     type: "UPDATE_PROJECT",
-    payload: project,
+    payload:  project,
   });
+  return project;
 };
 
 

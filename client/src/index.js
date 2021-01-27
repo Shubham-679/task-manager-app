@@ -14,15 +14,14 @@ import 'font-awesome/css/font-awesome.min.css';
 store.subscribe(() => console.log(store.getState()))
 
 ReactDOM.render(
-  <React.StrictMode>
+ 
       <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
       <HashRouter>
          <App/>
     </HashRouter>
          </PersistGate>
-      </Provider>
-  </React.StrictMode>,
+      </Provider>,
   document.getElementById('root')
 );
 

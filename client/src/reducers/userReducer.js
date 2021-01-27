@@ -4,7 +4,10 @@ const userReducer = (state = [], action) => {
       return (state = action.payload);
 
     case "FIND_USER":
-      return state = action.payload;
+      return {
+        user : action.payload,
+        isAdmin : action.payload.user.isAdmin
+      };
 
     case "LOGOUT_USER":
       return (state = {});

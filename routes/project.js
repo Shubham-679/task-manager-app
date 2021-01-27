@@ -2,6 +2,7 @@ const express = require("express");
 const Project = require("../model/projectModel");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const { Task } = require("../model/taskModel");
 
 
 router.get("/", async (req, res) => {
@@ -27,9 +28,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
     const project = new Project({
       title: req.body.title,
-      description : req.body.description,
-      task : req.body.task,
-      user: req.body.user,
+      description : req.body.description
     });
     try {
       await project.save();
@@ -43,10 +42,18 @@ router.post("/", async (req, res) => {
 
 router.put("/", async (req, res) => {
   try {
-    console.log(req.body._id)
-    const project = await Project.findByIdAndUpdate(req.body._id, req.body, {
+    console.log(req.body)
+    
+    const project = await Project.findByIdAndUpdate(req.body._id, {
+      title: req.body.title,
+      description : req.body.description,
+      tasks : {
+        task : req.body.task
+      },
+      user: req.body.user,
+    }, {
       new: true,
-    }).populate("user" , "name")
+    }).populate("user" , "name -_id")
     if (!project) {
       res.status(404).send();
     }

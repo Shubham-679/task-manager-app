@@ -5,7 +5,6 @@ import { Button, Modal }  from "react-bootstrap"
 import {
   addProject,
   getProjects,
-  updateProject,
   removeProject,
 } from "../actions";
 
@@ -20,6 +19,7 @@ const AddProject = (props) => {
 
   const [show, setShow] = useState(false);
   const [values, setValues] = useState(initialValues);
+  // const [projects, setProject] = useState(props.projects);
   const dispatch = useDispatch();
 
   const handleClose = () => setShow(false);

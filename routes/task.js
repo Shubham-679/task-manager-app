@@ -2,8 +2,9 @@ const express = require("express");
 const Task = require("../model/taskModel");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const User = require('../model/userModel')
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const tasks = await Task.find({
         owner: req.user._id
@@ -11,16 +12,19 @@ router.get("/", auth, async (req, res) => {
       .populate("owner", "name _id")
       .select("description completed");
     res.status(201).send(tasks);
+    console.log(tasks)
   } catch (error) {
     res.status(500);
   }
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", async (req, res) => {
+  
+  const user = await User.findById(req.body.user)
   const task = new Task({
-    description: req.body.description,
-    owner: req.user._id,
-  });
+    description: req.body.task,
+    owner: user._id,
+  })
   try {
     await task.save();
     res.status(200).send(task);
@@ -62,9 +66,6 @@ router.delete('/:id', auth, async (req, res) => {
 })
 
 router.patch('/:id', auth, async (req, res) => {
-
-  console.log("inside patch")
-
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
