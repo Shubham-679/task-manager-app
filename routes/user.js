@@ -18,7 +18,8 @@ router.get('/me' , auth , async (req, res) => {
 router.get("/", async (req, res) => {
     try {
       const users = await User.find().select('-password');
-      res.status(201).send(users);
+      const user = users.filter((a)=> !a.isAdmin)
+      res.status(201).send(user);
     } catch (error) {
       res.status(500);
     }
@@ -49,6 +50,17 @@ router.post('/login',  async (req, res) => {
     }
 })
 
+// router.post('/login/admin',  async (req, res) => {
+//     try {
+//         const user = await User.findByCredentials(req.body.email, req.body.password)
+//         const token = await user.generateAuthToken();
+//         res.status(201).send({ user , token});
+//     } catch (e) {
+//         console.log(e);
+//         res.status(400).send(e)
+//     }
+// })
+
 router.get('/logout', auth, async (req, res)=>{
     try {
         req.user.tokens = req.user.tokens.filter(token => token.token != req.token)
@@ -58,6 +70,8 @@ router.get('/logout', auth, async (req, res)=>{
         res.status(400).send()
     }
 })
+
+
 router.patch('/me', auth, async(req, res)=>{
 
     const updates = Object.keys(req.body)

@@ -14,7 +14,7 @@ const projectReducer = (state = [], action) => {
         return state.filter((a) => a._id !== action.payload._id)
       
       case "SINGLE_PROJECT":
-        return { project : action.payload}
+        return [ action.payload ]
 
       case "UPDATE_PROJECT":
         return {

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
-import { logoutUser } from "../actions";
+import { logoutUser } from "../actions/userAction";
 
 const Logout = ({ token }) => {
   const dispatch = useDispatch();

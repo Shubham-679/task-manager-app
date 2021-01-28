@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from "react-redux";
-import { findProject, getUser, updateProject, addTask, getTasks } from '../actions/index'
+import { findProject, updateProject} from '../actions/projectAction'
+import { addTask, getTasks } from '../actions/taskAction'
+import { getUser} from '../actions/userAction'
 import {withRouter} from 'react-router-dom';
 import { Button, Modal }  from "react-bootstrap"
 
@@ -9,7 +11,7 @@ const token = localStorage.getItem("x-auth-token");
 const Project = (props) => {
 
     const dispatch = useDispatch();
-    const [projectValues, setProjectValues] = useState({});
+    const [projectValues, setProjectValues] = useState([{}]);
     const [values, setValues] = useState({});
     const [users, setUser] = useState([]);
     const [tasks, setTask] = useState([]);
@@ -28,7 +30,7 @@ const Project = (props) => {
         .then(res  => setProjectValues(res));
         dispatch(getUser())
         .then(res  => setUser(res));
-        dispatch(getTasks())
+        dispatch(getTasks(projectId))
         .then(res  => setTask(res));
     },[dispatch])
 
@@ -58,11 +60,12 @@ const Project = (props) => {
 
       const handleSubmitTask =  (e) => {
         e.preventDefault();
-        dispatch(addTask(values))
+        const projectId = props.match.params.id;
+        dispatch(addTask(values, projectId))
         .then((res) => {
           setTask((tasks) => [res, ...tasks]);
         })
-        // window.location.reload();
+        window.location.reload();
       };
       
     return ( 
@@ -153,10 +156,10 @@ const Project = (props) => {
             </Modal.Body>
           </Modal>
           </div>
-          <div className="container">
+          <div className="container mx-6">
           <div className="row">
             {tasks.map(task => (
-              <div className="col-sm-5 card text-white bg-dark mb-3 m-2">
+              <div className="col-sm-5 card text-white bg-dark mb-3 m-2" key={task._id}>
                <div className="card-header">Task : {task.description}</div>
                <h5 className="card-title">User : {task.owner.name}</h5>
                 </div>

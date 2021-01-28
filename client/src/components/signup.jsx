@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUser } from "../actions";
+import { addUser } from "../actions/userAction";
 import { toast } from "react-toastify";
 
 const initialValues = {

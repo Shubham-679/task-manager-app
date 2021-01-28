@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import React, { useState } from "react";
-import {  findUser } from "../actions";
+import {  findUser } from "../actions/userAction";
 import { toast } from "react-toastify";
 const initialValues = {
   email: "",

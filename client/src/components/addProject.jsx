@@ -6,7 +6,7 @@ import {
   addProject,
   getProjects,
   removeProject,
-} from "../actions";
+} from "../actions/projectAction";
 
 const initialValues = {
     title : "",
@@ -58,7 +58,7 @@ const AddProject = (props) => {
       {token && (
         <React.Fragment>
           <div className="m-5">
-            <h1> Welcome {props.users.user.name}..! </h1>
+            <h1> Welcome </h1>
             <h5> Now You Can Add Your Tasks... Here </h5>
           </div>
           <Button variant="primary" onClick={handleShow}>

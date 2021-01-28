@@ -2,28 +2,56 @@ const express = require("express");
 const Task = require("../model/taskModel");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-const User = require('../model/userModel')
+const User = require('../model/userModel');
+const Project = require("../model/projectModel");
 
-router.get("/", async (req, res) => {
+// router.get("/", async (req, res) => {
+//   try {
+//     const tasks = await Task.find({
+//         owner: req.user._id
+//       })
+//       .populate("owner", "name _id")
+//       .select("description completed");
+//     res.status(201).send(tasks);
+//     console.log(tasks)
+//   } catch (error) {
+//     res.status(500);
+//   }
+// });
+
+router.get("/:id", async (req, res) => {
   try {
-    const tasks = await Task.find({
-        owner: req.user._id
-      })
+    const tasks = await Task.find({project : req.params.id})
       .populate("owner", "name _id")
       .select("description completed");
     res.status(201).send(tasks);
-    console.log(tasks)
   } catch (error) {
-    res.status(500);
+    res.status(500).send(error);
+  }
+});
+
+router.get("/users/:id", async (req, res) => {
+  try {
+    console.log("hello")
+    const tasks = await Task.find({owner : req.params.id})
+      .populate("project", "title description _id")
+      .select("description completed");
+      console.log(tasks)
+    res.status(201).send(tasks);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
 router.post("/", async (req, res) => {
-  
+ 
   const user = await User.findById(req.body.user)
+  const project = await Project.findById(req.body.projectId)
+  
   const task = new Task({
     description: req.body.task,
     owner: user._id,
+    project : project._id
   })
   try {
     await task.save();

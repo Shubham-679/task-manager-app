@@ -1,6 +1,6 @@
 import  { useEffect } from 'react';
 import { connect, useDispatch } from "react-redux"
-import { removeUser } from '../actions';
+import { removeUser } from '../actions/userAction';
 import { toast } from "react-toastify";
 
 const Deleteaccount = ({token}) => {

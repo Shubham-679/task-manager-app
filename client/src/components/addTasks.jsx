@@ -1,7 +1,7 @@
 import { Redirect } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import React, { useEffect } from "react";
-import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions";
+import {  getUserTasks, toggleTask} from "../actions/taskAction";
 
 
 
@@ -11,29 +11,12 @@ const Tasks = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("in effect",token)
-    dispatch(getTasks(token));
+    const userId = props.users.user._id
+    dispatch(getUserTasks(userId));
   }, [dispatch]);
-
-  let input = React.createRef();
-  const handleOnsubmit = (e) => {
-    e.preventDefault();
-    const task = input.current.value;
-    dispatch(addTask(task, token));
-  };
-
-  let value;
-  const handleChange = (e) => {
-    value = e.target.value;
-  };
-  const handleUpdate = (task) => {
-    task.description = value;
-    dispatch(updateTask(task, token));
-  };
-
-  const handleRemove = async (task) => {
-    dispatch(removeTask(task._id, token));
-  };
+  
+  console.log(props.tasks)
+  
 
   return (
     <div className="container">
@@ -49,57 +32,14 @@ const Tasks = (props) => {
             <h1> Welcome {props.users.user.name}..! </h1>
             <h5> Now You Can Add Your Tasks... Here </h5>
           </div>
-          <form onSubmit={handleOnsubmit}>
-            <input
-              type="text"
-              id="add"
-              ref={input}
-              placeholder="Add New Task..."
-              className="m-2"
-            />
-            <button className="btn btn-primary m-2">Add</button>
-          </form>
 
-          <div className="container col-12">
+          <div className="container">
             <ul className="list-group">
               {props.tasks.map((task) => (
-                <li className="list-group-item" key={task._id}
-                
-                >
-
-                  <div className="row">
-                    <div className="col-4">
-                  {task.description}
-
-                    </div>
-                  
-
-                  
-                  <div className="col-4">
-                    <input
-                      type="text"
-                      id="update"
-                      placeholder="Update"
-                      onChange={handleChange}
-                      className="m-2"
-                    />
-
-                    <button
-                      className="btn btn-warning btn-sm"
-                      onClick={() => handleUpdate(task)}
-                      >Update
-                    </button>
-                  </div>
-
-                  <div className="align-top text-right col-4">
-                    <i className="fa fa-trash-o" aria-hidden="true"
-                        onClick={() => handleRemove(task)}
-                        style={{ cursor: "pointer"}}
-                    />
-                </div>
-                
-                  </div>
-                </li>
+                <div className="list-group-item col-sm-10 card text-white bg-secondary mb-3 m-2" key={task._id}>
+                <h5 className="card-title">Project : {task.project.title}</h5>
+                <div className="card-header">Task : {task.description}</div>
+                 </div>
               ))}
             </ul>
           </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { updateUser, addProfileImg } from "../actions";
+import { updateUser, addProfileImg } from "../actions/userAction";
 import { toast } from "react-toastify";
 
 const Profile = (props) => {
