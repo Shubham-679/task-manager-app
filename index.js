@@ -8,7 +8,7 @@ const users = require('./routes/user');
 const tasks = require('./routes/task');
 const projects = require('./routes/project');
 
-// require('dotenv/config');
+require('dotenv/config');
 
 app.use(cors());
 app.use(express.json());
@@ -25,7 +25,7 @@ app.use('/public', express.static('public'));
 
 
 app.use(express.static(path.join(__dirname, 'client/build')));
-app.get('*', (req,res) =>{
+app.get('/*', (req,res) =>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
@@ -33,7 +33,7 @@ app.get('*', (req,res) =>{
 
 // 'mongodb://localhost/Dummy'
 // process.env.mongoUri
-mongoose.connect('mongodb://localhost/Dummy',{
+mongoose.connect('process.env.mongoUri',{
      useNewUrlParser: true,
      useUnifiedTopology: true,
      useCreateIndex : true,
