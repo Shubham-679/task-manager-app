@@ -4,7 +4,8 @@ import Navbar from "./components/navbar";
 import Home from './components/home';
 import Login from './components/login';
 import Signup from './components/signup';
-import Tasks from './components/addTasks';
+import AddTasks from './components/addTasks';
+import Tasks from "./components/tasks";
 import NotFound from './components/notFound'
 import Logout from './components/logout';
 import Profile from './components/profile';
@@ -27,7 +28,8 @@ function App() {
       <Route path="/home" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
-      <Route path="/tasks" component={Tasks} />
+      <Route path="/addtasks" component={AddTasks} />
+      <Route path="/tasks/:id" component={Tasks} />
       <Route path="/addproject" component={addProject} />
       <Route path="/project/:id" component={Project} />
       <Route path="/logout" component={Logout} />

@@ -3,8 +3,7 @@ import { NavLink, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 const Navbar = ({users}) => {
-   console.log(users.token)
-   
+  
         return (
             <div className="container-fluid"  style={{backgroundColor : '#2d4059'}}>
                 <nav className="navbar sticky-top navbar-expand-sm navbar-dark" >
@@ -36,7 +35,7 @@ const Navbar = ({users}) => {
 
                                 {users.token  && !users.isAdmin &&  (
                                 <React.Fragment>
-                                <NavLink className="nav-link" to="/tasks">Tasks</NavLink>
+                                <NavLink className="nav-link" to="/addtasks">Tasks</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
                                 <NavLink className="nav-link" to="/logout">Logout</NavLink>
                                 </React.Fragment>

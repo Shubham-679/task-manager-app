@@ -1,5 +1,3 @@
-import project from "../components/project";
-
 
 const projectReducer = (state = [], action) => {
     switch (action.type) {

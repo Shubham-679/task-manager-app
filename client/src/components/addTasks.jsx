@@ -1,4 +1,4 @@
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import React, { useEffect } from "react";
 import {  getUserTasks, toggleTask} from "../actions/taskAction";
@@ -6,7 +6,7 @@ import {  getUserTasks, toggleTask} from "../actions/taskAction";
 
 
 const token = localStorage.getItem("x-auth-token");
-const Tasks = (props) => {
+const AddTasks = (props) => {
 
   const dispatch = useDispatch();
 
@@ -36,10 +36,12 @@ const Tasks = (props) => {
           <div className="container">
             <ul className="list-group">
               {props.tasks.map((task) => (
-                <div className="list-group-item col-sm-10 card text-white bg-secondary mb-3 m-2" key={task._id}>
-                <h5 className="card-title">Project : {task.project.title}</h5>
+                <Link to={`/tasks/${task._id}`}>
+                <div className="list-group-item col-sm-5 card text-white bg-secondary mb-3 m-2" key={task._id}>
                 <div className="card-header">Task : {task.description}</div>
+                <h5 className="card-title">Project : {task.project.title}</h5>
                  </div>
+                </Link>
               ))}
             </ul>
           </div>
@@ -55,4 +57,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   toggleTask: (id, token) => dispatch(toggleTask(id, token)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
+export default connect(mapStateToProps, mapDispatchToProps)(AddTasks);

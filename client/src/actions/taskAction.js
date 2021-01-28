@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const addTask = (obj, projectId) => async (dispatch) => {
  const obj1 ={...obj, projectId}
-    const {data: newTask} = await axios.post("/tasks",obj1);
+    const {data: newTask} = await axios.post("http://localhost:3000/tasks",obj1);
     dispatch({
       type: "ADD_TASK",
       payload: newTask,
@@ -12,7 +12,7 @@ export const addTask = (obj, projectId) => async (dispatch) => {
   };
   
   export const getTasks = (projectId) => async (dispatch) => {
-    const {data: tasks} = await axios.get("/tasks/"+ projectId);
+    const {data: tasks} = await axios.get("http://localhost:3000/tasks/"+ projectId);
     dispatch({
       type: "GET_TASKS",
       payload: tasks,
@@ -21,7 +21,7 @@ export const addTask = (obj, projectId) => async (dispatch) => {
   };
 
   export const getUserTasks = (userId) => async (dispatch) => {
-    const {data: tasks} = await axios.get("/tasks/users/"+ userId);
+    const {data: tasks} = await axios.get("http://localhost:3000/tasks/users/"+ userId);
     dispatch({
       type: "GET_USER_TASKS",
       payload: tasks,
@@ -30,7 +30,7 @@ export const addTask = (obj, projectId) => async (dispatch) => {
   };
   
   export const toggleTask = (id , token) => async (dispatch) => {
-    const { data: taskToggle} = await axios.put("/tasks/" + id, {
+    const { data: taskToggle} = await axios.put("http://localhost:3000/tasks/" + id, {
       headers: {"x-auth-token": token},
     });
     dispatch ({
@@ -40,7 +40,7 @@ export const addTask = (obj, projectId) => async (dispatch) => {
   }
   
   export const updateTask = (task, token) => async (dispatch) => {
-    await axios.patch("/tasks/" + task._id, task, {
+    await axios.patch("http://localhost:3000/tasks/" + task._id, task, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -51,7 +51,7 @@ export const addTask = (obj, projectId) => async (dispatch) => {
   
   
   export const removeTask = (taskId, token) => async (dispatch) => {
-    const {data: tasks} = await axios.delete("/tasks/" + taskId, {
+    const {data: tasks} = await axios.delete("http://localhost:3000/tasks/" + taskId, {
       headers: {"x-auth-token": token},
     });
     dispatch({
