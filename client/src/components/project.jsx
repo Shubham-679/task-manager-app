@@ -3,7 +3,7 @@ import { connect, useDispatch } from "react-redux";
 import { findProject, updateProject} from '../actions/projectAction'
 import { addTask, getTasks } from '../actions/taskAction'
 import { getUser} from '../actions/userAction'
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import { Button, Modal }  from "react-bootstrap"
 
 
@@ -156,14 +156,16 @@ const Project = (props) => {
             </Modal.Body>
           </Modal>
           </div>
-          <div className="container mx-6">
+          <div className="container">
           <div className="row">
             {tasks.map(task => (
+              
               <div className="col-sm-5 card text-white bg-dark mb-3 m-2" key={task._id}>
                <div className="card-header">Task : {task.description}</div>
                <h5 className="card-title">User : {task.owner.name}</h5>
-                </div>
-              ))}
+               <Link to={`/updatetask/${task._id}`} className="stretched-link"></Link>
+              </div>
+            ))}
           </div>
           </div>
         </div>

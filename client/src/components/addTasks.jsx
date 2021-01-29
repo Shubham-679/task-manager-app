@@ -1,7 +1,7 @@
 import { Link, Redirect } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import React, { useEffect } from "react";
-import {  getUserTasks, toggleTask} from "../actions/taskAction";
+import {  getUserTasks } from "../actions/taskAction";
 
 
 
@@ -14,9 +14,6 @@ const AddTasks = (props) => {
     const userId = props.users.user._id
     dispatch(getUserTasks(userId));
   }, [dispatch]);
-  
-  console.log(props.tasks)
-  
 
   return (
     <div className="container">
@@ -36,7 +33,7 @@ const AddTasks = (props) => {
           <div className="container">
             <ul className="list-group">
               {props.tasks.map((task) => (
-                <Link to={`/tasks/${task._id}`}>
+                <Link to={`/tasks/${task._id}`}  style={{textDecoration: 'none'}}>
                 <div className="list-group-item col-sm-5 card text-white bg-secondary mb-3 m-2" key={task._id}>
                 <div className="card-header">Task : {task.description}</div>
                 <h5 className="card-title">Project : {task.project.title}</h5>
@@ -54,7 +51,5 @@ const mapStateToProps = (state) => ({
   users: state.users,
   tasks: state.tasks,
 });
-const mapDispatchToProps = (dispatch) => ({
-  toggleTask: (id, token) => dispatch(toggleTask(id, token)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(AddTasks);
+
+export default connect(mapStateToProps)(AddTasks);

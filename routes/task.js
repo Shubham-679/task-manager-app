@@ -5,19 +5,20 @@ const auth = require("../middlewares/auth");
 const User = require('../model/userModel');
 const Project = require("../model/projectModel");
 
-// router.get("/", async (req, res) => {
-//   try {
-//     const tasks = await Task.find({
-//         owner: req.user._id
-//       })
-//       .populate("owner", "name _id")
-//       .select("description completed");
-//     res.status(201).send(tasks);
-//     console.log(tasks)
-//   } catch (error) {
-//     res.status(500);
-//   }
-// });
+// get particular task by there id
+
+router.get("/task/:id", async (req, res) => {
+  try {
+    const tasks = await Task.find({_id: req.params.id})
+      .populate("project owner", "title name")
+      .select("description completed");
+    res.status(201).send(tasks);
+  } catch (error) {
+    res.status(500);
+  }
+});
+
+// get all task of particular project for admin 
 
 router.get("/:id", async (req, res) => {
   try {
@@ -30,13 +31,13 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// get all task for user 
+
 router.get("/users/:id", async (req, res) => {
   try {
-    console.log("hello")
     const tasks = await Task.find({owner : req.params.id})
       .populate("project", "title description _id")
       .select("description completed");
-      console.log(tasks)
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500).send(error);
@@ -94,6 +95,24 @@ router.delete('/:id', auth, async (req, res) => {
 })
 
 router.patch('/:id', auth, async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    })
+    if (!task) {
+      res.status(404).send();
+    }
+    res.status(200).send(task);
+
+  } catch (e) {
+    console.log(e);
+    res.status(404).send()
+  }
+
+})
+
+router.patch('/task/:id', async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

@@ -19,6 +19,15 @@ export const addTask = (obj, projectId) => async (dispatch) => {
     });
     return tasks;
   };
+  
+  export const getTaskById = (taskId) => async (dispatch) => {
+    const {data: task} = await axios.get("http://localhost:3000/tasks/task/"+ taskId);
+    dispatch({
+      type: "GET_TASK_BYID",
+      payload: task,
+    });
+    return task;
+  };
 
   export const getUserTasks = (userId) => async (dispatch) => {
     const {data: tasks} = await axios.get("http://localhost:3000/tasks/users/"+ userId);
@@ -29,27 +38,29 @@ export const addTask = (obj, projectId) => async (dispatch) => {
     return tasks;
   };
   
-  export const toggleTask = (id , token) => async (dispatch) => {
-    const { data: taskToggle} = await axios.put("http://localhost:3000/tasks/" + id, {
-      headers: {"x-auth-token": token},
-    });
-    dispatch ({
-        type : 'TOGGLE_TASK',
-        taskToggle
-    })
-  }
-  
-  export const updateTask = (task, token) => async (dispatch) => {
-    await axios.patch("http://localhost:3000/tasks/" + task._id, task, {
-      headers: {"x-auth-token": token},
+  export const updateTask = (task, id) => async (dispatch) => {
+    await axios.patch("http://localhost:3000/tasks/task" + id, task, {
+      
     });
     dispatch({
       type: "UPDATE_TASKS",
       payload: task,
     });
+    return task
   };
   
-  
+  export const toggleTask = (task, token) => async (dispatch) => {
+    await axios.patch("http://localhost:3000/tasks/" + task._id, task, {
+      headers: {"x-auth-token": token},
+    });
+    dispatch({
+      type: "TOGGLE_TASK",
+      payload: task,
+    });
+    return task
+  };
+
+
   export const removeTask = (taskId, token) => async (dispatch) => {
     const {data: tasks} = await axios.delete("http://localhost:3000/tasks/" + taskId, {
       headers: {"x-auth-token": token},

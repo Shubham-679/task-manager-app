@@ -12,6 +12,7 @@ import Profile from './components/profile';
 import Deleteaccount from './components/deleteAccount';
 import addProject from './components/addProject';
 import Project from './components/project'
+import UpdateTask from './components/updateTask';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,6 +33,7 @@ function App() {
       <Route path="/tasks/:id" component={Tasks} />
       <Route path="/addproject" component={addProject} />
       <Route path="/project/:id" component={Project} />
+      <Route path="/updatetask/:id" component={UpdateTask} />
       <Route path="/logout" component={Logout} />
       <Route path="/profile" component={Profile} />
       <Route path="/delete-account" component={Deleteaccount} />

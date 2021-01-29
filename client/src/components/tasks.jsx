@@ -1,34 +1,30 @@
 import { Redirect } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { addTask, getTasks, updateTask, removeTask, toggleTask} from "../actions/taskAction";
+import { getTaskById, toggleTask} from "../actions/taskAction";
 
-
-let initStatus = [
-  { id: 1, name : "Processing" , value : false},
-  { id: 2, name: "Done" , value : true}
-]
 const token = localStorage.getItem("x-auth-token");
 const Tasks = (props) => {
-
+  const options = [
+    { id: 1, name: "Processing", value: false },
+    { id: 2, name: "Done", value: true },
+  ];
   const dispatch = useDispatch();
-  const [ status, setStatus] = useState(initStatus)
-  console.log(status)
-  // useEffect(() => {
-  //   const taskId = props.match.params.id;
-  //   console.log(taskId)
-  //   dispatch(getTasks());
-  // }, [dispatch]);
+  const [status, setStatus] = useState("");
 
-  let value;
+  useEffect(() => {
+    const taskId = props.match.params.id;
+    dispatch(getTaskById(taskId));
+  }, [dispatch]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log(name)
-    console.log(value)
+    const { value } = e.target;
+    const isTrueSet = value === "true";
+    setStatus(isTrueSet);
   };
   const handleUpdate = (task) => {
-    task.description = value;
-    dispatch(updateTask(task, token));
+    task.completed = status;
+    dispatch(toggleTask(task, token));
   };
 
   return (
@@ -45,48 +41,49 @@ const Tasks = (props) => {
             <h1> Welcome {props.users.user.name}..! </h1>
             <h5> Now You Can Add Your Tasks... Here </h5>
           </div>
-    
-          <div className="container col-12">
+
+          <div className="container">
             <ul className="list-group">
               {props.tasks.map((task) => (
                 <li className="list-group-item" key={task._id}>
                   <div className="row">
-                    <div className="col-4">
-                     {task.description}
+                    <div className="col-1">
+                      {task.completed ? (
+                        <i class="fa fa-check fa-3x" aria-hidden="true"></i>
+                      ) : (
+                          <i class="fa fa-times fa-3x" aria-hidden="true"></i>
+                        )}
+                    </div>
+                    <div className="col-4">{task.description}</div>
+                    <div className="col-3">
+                      
+                        <label htmlFor="status" className="form-label">
+                          Status
+                        </label>
+                        <select
+                          name="status"
+                          id="status"
+                          label="Status"
+                          className="form-control"
+                          onChange={handleChange}
+                        >
+                          <option value="" />
+                          {options.map((option) => (
+                            <option key={option.id} value={option.value}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </select>
+                   
                     </div>
                     <div className="col-4">
-                     {task.completed}
-                    </div>
-                  <div className="col-4">
-                    {/* <input
-                      type="text"
-                      id="update"
-                      placeholder="Update"
-                      onChange={handleChange}
-                      className="m-2"
-                    /> */}
-                    <div className="mb-3">
-                      <label htmlFor="status" className="form-label">Status</label>
-                      <select name="status" id="status" label="Status" 
-                      // value={}
-                      className="form-control"
-                      onChange={handleChange}
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => handleUpdate(task)}
                       >
-                        <option value="" />
-                        {status.map((option) => (
-                        <option key={option.id} value={option.value}>
-                          {option.name}
-                        </option>
-                      ))}
-                </select>
-                    </div>
-
-                    <button
-                      className="btn btn-warning btn-sm"
-                      onClick={() => handleUpdate(task)}
-                      >Update
-                    </button>
-                  </div>
+                        Update
+                      </button>
+                      </div>
                   </div>
                 </li>
               ))}
@@ -101,7 +98,5 @@ const mapStateToProps = (state) => ({
   users: state.users,
   tasks: state.tasks,
 });
-const mapDispatchToProps = (dispatch) => ({
-  toggleTask: (id, token) => dispatch(toggleTask(id, token)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
+
+export default connect(mapStateToProps)(Tasks);
