@@ -38,7 +38,7 @@ const UpdateTask = (props) => {
         // .then((res) => {
         //   setTask((tasks) => [res, ...tasks]);
         // })
-        // window.location.reload();
+        window.location.reload();
       };
 
     return ( 
