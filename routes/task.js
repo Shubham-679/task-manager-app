@@ -4,6 +4,7 @@ const router = express.Router();
 const auth = require("../middlewares/auth");
 const User = require('../model/userModel');
 const Project = require("../model/projectModel");
+const { sendNewTaskEmail, sendUpdateTaskEmail } = require('../middlewares/email')
 
 // get particular task by there id
 
@@ -55,7 +56,10 @@ router.post("/", async (req, res) => {
     project : project._id
   })
   try {
+    console.log(user.email)
+    console.log(user.name)
     await task.save();
+    sendNewTaskEmail(user.email, user.name)
     res.status(200).send(task);
   } catch (e) {
     res.status(400).send(e);
@@ -114,7 +118,8 @@ router.patch('/:id', auth, async (req, res) => {
 
 router.put('/task/:id', async (req, res) => {
   try {
-    console.log(req.body)
+    const user = await User.findById(req.body.user)
+    console.log(user)
     const task = await Task.findByIdAndUpdate(req.params.id, {
       description : req.body.task,
       owner : req.body.user
@@ -125,7 +130,7 @@ router.put('/task/:id', async (req, res) => {
     if (!task) {
       res.status(404).send();
     }
-    console.log(task)
+    sendUpdateTaskEmail(user.email, user.name)
     res.status(200).send(task);
 
   } catch (e) {

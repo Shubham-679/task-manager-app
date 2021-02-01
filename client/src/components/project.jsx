@@ -70,10 +70,21 @@ const Project = (props) => {
       
     return ( 
         <div>
-            <h2>title : {projectValues.title}</h2>
-            <h2> description : {projectValues.description}</h2>
+           <div className="col-sm-10 card text-white bg-secondary mb-3 mt-4 "
+           style={{marginLeft:"100px"}}
+           >
+               <div className="card-header">title : {projectValues.title}</div>
+               <h5 className="card-title">description : {projectValues.description}</h5>
+               <div>
+              <Button className="btn m-2" variant="primary" onClick={handleShow}>Update</Button>
+              <Button variant="primary" onClick={handleShow1}>
+              Add Task
+            </Button>
+               </div>
+              </div>
+            {/* <h2>title : {projectValues.title}</h2>
+            <h2> description : {projectValues.description}</h2> */}
             <div className="m-2">
-            <Button variant="primary" onClick={handleShow}>Update</Button>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>New Project</Modal.Title>
@@ -112,9 +123,6 @@ const Project = (props) => {
 
 
           <div className="m-2">
-          <Button variant="primary" onClick={handleShow1}>
-              Add Task
-            </Button>
 
           <Modal show={show1} onHide={handleClose1}>
             <Modal.Header closeButton>
@@ -157,10 +165,11 @@ const Project = (props) => {
           </Modal>
           </div>
           <div className="container">
-          <div className="row">
-            {tasks.map(task => (
-              
-              <div className="col-sm-5 card text-white bg-dark mb-3 m-2" key={task._id}>
+          <div className="row"
+          style={{marginLeft:"100px"}}>
+            {tasks.map(task => (      
+              <div className="col-sm-5 card text-white bg-dark mb-3 m-2" key={task._id}
+              >
                <div className="card-header">Task : {task.description}</div>
                <h5 className="card-title">User : {task.owner.name}</h5>
                <Link to={`/updatetask/${task._id}`} className="stretched-link"></Link>

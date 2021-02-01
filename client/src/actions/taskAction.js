@@ -39,7 +39,6 @@ export const addTask = (obj, projectId) => async (dispatch) => {
   };
   
   export const updateTask = (task, id) => async (dispatch) => {
-    console.log(task)
     const tasks = await axios.put("http://localhost:3000/tasks/task/" + id, task, {
       
     });
@@ -47,7 +46,6 @@ export const addTask = (obj, projectId) => async (dispatch) => {
       type: "UPDATE_TASKS",
       payload: tasks,
     });
-    console.log(tasks)
     return tasks
   };
   

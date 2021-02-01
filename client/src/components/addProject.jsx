@@ -101,17 +101,21 @@ const AddProject = (props) => {
             </Modal.Body>
           </Modal>
 
-          <div className="container col-4 mt-5">
-            <ul className="list-group">
+          <div className="container mt-5">
+            <ul className="col-12 list-group">
                 {props.projects.map(project => (
-                    <li className="list-group-item" 
+                    <li className="row list-group-item" 
                     key={project._id}
                     >
-                      <div className="float-left">
-                        <Link to={`/project/${project._id}`}>View</Link>
+                      <div className="text-left">
+                        <Link to={`/project/${project._id}`}><i class="fa fa-eye"></i></Link>
+                      </div>
+                      <div className="col-4 float-left">
                         <p>Title : {project.title} </p>
+                      </div>
+                      <div className="col-4 float-left">
                         <p>Description : {project.description} </p>
-                        </div>
+                      </div>
                         <div className="text-right">
                         <i className="fa fa-trash" aria-hidden="true" 
                         onClick={() => handleRemove(project)} 

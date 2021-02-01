@@ -3,7 +3,7 @@ const User = require("../model/userModel");
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const auth = require('../middlewares/auth')
-const { sendWelcomeEmail } = require('../middlewares/email')
+
 const multer = require("multer");
 
 router.get('/me' , auth , async (req, res) => {
@@ -31,7 +31,6 @@ router.post('/' , async (req, res) => {
         const salt = await bcrypt.genSalt(10);  
         user.password = await bcrypt.hash(user.password , salt);
         await user.save();
-        sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken();
         res.header('x-auth-token', token).status(201).send(user);
     } catch (e) {
