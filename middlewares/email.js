@@ -1,16 +1,12 @@
 const nodemailer = require('nodemailer');
 
-// const sendgridAPIkey = ''
-
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
+console.log("email => ",process.env.adminEmail)
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'kushwahshubham679@gmail.com',
-      pass: '7047833761'
+      user: process.env.adminEmail,
+      pass: process.env.adminPassword
     },
-
     tls:{
       rejectUnauthorized:false
     }

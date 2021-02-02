@@ -26,6 +26,7 @@ const Navbar = ({users}) => {
 
                                 {users.token && users.isAdmin && (
                                 <React.Fragment>
+                                <Link className="navbar-brand" to="/home">Home</Link>
                                 <NavLink className="nav-link" to="/addproject">Projects</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
                                 {/* <NavLink className="nav-link" to="/delete-account">Delete Account</NavLink> */}
@@ -35,6 +36,7 @@ const Navbar = ({users}) => {
 
                                 {users.token  && !users.isAdmin &&  (
                                 <React.Fragment>
+                                <Link className="navbar-brand" to="/home">Home</Link>
                                 <NavLink className="nav-link" to="/addtasks">Tasks</NavLink>
                                 <NavLink className="nav-link" to="/profile">Profile</NavLink>
                                 <NavLink className="nav-link" to="/logout">Logout</NavLink>

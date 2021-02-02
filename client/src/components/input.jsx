@@ -2,10 +2,9 @@ import React from 'react';
 
 
 const Input = ({value, onChange, name, type, error, label, placeholder}) => {
-    console.log(error)
     return ( 
         <div className="form-group">
-            <label htmlFor={name} className="form-label" >{label}</label>
+            <label htmlFor={name} className="form-label float-left" >{label}</label>
             <input
               value={value}
               onChange={onChange}
@@ -14,7 +13,7 @@ const Input = ({value, onChange, name, type, error, label, placeholder}) => {
               placeholder={placeholder}
               className="form-control"
             />
-            {error && <div className="alert alert-danger">{error}</div>}           
+            {error && <small className="text-danger lead">{error}</small>}           
           </div>
      );
 }

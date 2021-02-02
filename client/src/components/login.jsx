@@ -11,94 +11,68 @@ const initialValues = {
 };
 
 const Login = (props) => {
-  let [errors , setErrors] = useState({ email: "",
-  password: "",});
-  console.log(errors.email)
+  const [errors , setErrors] = useState({});
   const [values, setValues] = useState(initialValues);
   const dispatch = useDispatch();
 
-  const schema = {
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().min(5).regex(/[a-zA-Z0-9]{3,30}/).label("Password"),
-  };
-
   const validateProperty = (name, value) => {
-    const obj = {[name]: value};
-    const fieldSchema = {[name]: schema[name]};
-    const { error } = Joi.validate(obj, fieldSchema);
-    return error ? error.details[0].message : null;
+        if(name === "email"){
+            if(value.trim() === '') return 'Email Is Required'
+        }
+        if(name === "password"){
+            if(value.trim() === '') return 'Password Is Required'
+        }
 };
 const validate = () => {
-  const options = {
-      abortEarly: false
-  };
-  const {error} = Joi.validate(values, schema, options);
-  if (!error) return null;
-  const errors = {};
-  console.log(error.details)
-  for (let item of error.details) errors[item.path[0]] = item.message;
-  console.log(errors)
-  console.log(errors.email)
-  return errors;
-  // result.error === null -> valid
+   const errors= {}
+    if(values.email.trim() === "")
+      errors.email = "Email is required"
+    if(values.password.trim() === "")
+      errors.password = " Password is required"
+    return Object.keys(errors).length === 0 ? null : errors;
+ 
 };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const errors = validate();
-    console.log(errors);
-    console.log(errors.email)
-    setErrors({errors});
-    if (errors) return;
-
+    const er = validate();
+    setErrors(errors => er || {});
+    if (er) {return}
+    else {
     dispatch(findUser(values))
       .then((res) => {
         toast.success("Login Success");
         localStorage.setItem("x-auth-token", res.token);
-        // window.location = "/";
+        window.location = "/";
         // props.history.push('/tasks');
       })
       .catch((e) => {
         toast.error("Email or Password Are Invalid !");
         console.log(e);
       });
+    }
   };
 
   const handleInputChange = (e) => {
-    const errors = { ...errors}
+    const err = errors
     const { name, value } = e.currentTarget;
     const errorMessages = validateProperty(name, value);
-    if (errorMessages) errors[name] = errorMessages;
-    else delete errors[name];
+    if (errorMessages) err[name] = errorMessages;
+    else delete err[name];
     
     setValues({
       ...values,
       [name]: value,
     });
-    setErrors({errors})
+    setErrors(errors=> err || {})
   };
-  console.log(typeof errors)
-console.log(errors.email)
-console.log(errors.password)
+
   return (
     
     <div className="container">
       <h1 className="m-4"> Login Here..</h1>
       <div className="d-flex justify-content-center">
         <form onSubmit={handleSubmit}>
-         
-            {/* <label htmlFor="Email" className="form-label float-left">
-              Email address
-            </label>
-            <input
-              value={values.email}
-              onChange={handleInputChange}
-              name="email"
-              type="email"
-              placeholder="Enter Your Email"
-              className="form-control"
-              
-            /> */}
            <Input 
            value={values.email}
            onChange={handleInputChange}
@@ -109,25 +83,26 @@ console.log(errors.password)
            error={errors.email}
            className="form-control"
            />
-            <small id="emailHelp" className="form-text">
+            <small id="emailHelp" className="form-text mark">
               We'll never share your email with anyone else.
             </small>
           
           <div className="mb-3">
-            <label htmlFor="Password" className="form-label float-left">
+            <label htmlFor="Password" className="form-label float-left mt-2">
               Password
             </label>
-            <input
+            <Input
               value={values.password}
               onChange={handleInputChange}
               name="password"
               type="password"
               placeholder="Enter Your Password"
               className="form-control"
+              error={errors.password}
             />
           </div>
           <div className="mb-3">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-dark btn-lg btn-block">
               Login
             </button>
           </div>

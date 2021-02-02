@@ -49,9 +49,9 @@ const Tasks = (props) => {
                   <div className="row">
                     <div className="col-1">
                       {task.completed ? (
-                        <i class="fa fa-check fa-3x" aria-hidden="true"></i>
+                        <i className="fa fa-check fa-3x" aria-hidden="true"></i>
                       ) : (
-                          <i class="fa fa-times fa-3x" aria-hidden="true"></i>
+                          <i className="fa fa-times fa-3x" aria-hidden="true"></i>
                         )}
                     </div>
                     <div className="col-4">{task.description}</div>

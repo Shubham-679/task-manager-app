@@ -27,14 +27,14 @@ const AddTasks = (props) => {
         <React.Fragment>
           <div className="m-5">
             <h1> Welcome {props.users.user.name}..! </h1>
-            <h5> Now You Can Add Your Tasks... Here </h5>
+            <h5> Now You Can See Your All Tasks....  Here </h5>
           </div>
 
           <div className="container">
             <ul className="list-group">
               {props.tasks.map((task) => (
-                <Link to={`/tasks/${task._id}`}  style={{textDecoration: 'none'}}>
-                <div className="list-group-item col-sm-5 card text-white bg-secondary mb-3 m-2" key={task._id}>
+                <Link to={`/tasks/${task._id}`}  style={{textDecoration: 'none'}} key={task._id}>
+                <div className="list-group-item col-sm-5 card text-white bg-secondary mb-3 m-2">
                 <div className="card-header">Task : {task.description}</div>
                 <h5 className="card-title">Project : {task.project.title}</h5>
                  </div>
