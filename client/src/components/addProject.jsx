@@ -49,13 +49,13 @@ const AddProject = (props) => {
 
   return (
     <div className="container">
-      {!token && (
+      {!token && !props.users.isAdmin && (
         <React.Fragment>
           <Redirect to="/not-found" />
         </React.Fragment>
       )}
 
-      {token && (
+      {token && props.users.isAdmin &&(
         <React.Fragment>
           <div className="m-5">
             <h1> Welcome </h1>

@@ -62,9 +62,11 @@ export const addTask = (obj, projectId) => async (dispatch) => {
 
 
   export const removeTask = (taskId, token) => async (dispatch) => {
+    console.log(taskId)
     const {data: tasks} = await axios.delete("/tasks/" + taskId, {
       headers: {"x-auth-token": token},
     });
+    console.log(tasks)
     dispatch({
       type: "REMOVE_TASK",
       payload: tasks,

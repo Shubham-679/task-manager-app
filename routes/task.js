@@ -48,7 +48,10 @@ router.get("/users/:id", async (req, res) => {
 router.post("/", async (req, res) => {
  
   const user = await User.findById(req.body.user)
+  if(!user) return res.status(404).send('User Not Found');
+
   const project = await Project.findById(req.body.projectId)
+  if(!project) return res.status(404).send('Project Not Found');
   
   const task = new Task({
     description: req.body.task,
@@ -56,8 +59,6 @@ router.post("/", async (req, res) => {
     project : project._id
   })
   try {
-    console.log(user.email)
-    console.log(user.name)
     await task.save();
     sendNewTaskEmail(user.email, user.name)
     res.status(200).send(task);
@@ -85,8 +86,7 @@ router.post("/", async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({
-      _id: req.params.id,
-      owner: req.user._id
+      _id: req.params.id
     })
     if (!task) {
       res.status(404).send()
@@ -118,8 +118,9 @@ router.patch('/:id', auth, async (req, res) => {
 
 router.put('/task/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.body.user)
-    console.log(user)
+    const user = await User.findById(req.body.user);
+    if(!user) return res.status(404).send('User Not Found');
+
     const task = await Task.findByIdAndUpdate(req.params.id, {
       description : req.body.task,
       owner : req.body.user
