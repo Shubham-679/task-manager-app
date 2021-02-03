@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 const Deleteaccount = ({token}) => {
 const dispatch =  useDispatch();
-console.log(token)
 
     useEffect(()=>{
     dispatch(removeUser(token))

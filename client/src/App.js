@@ -13,6 +13,7 @@ import Deleteaccount from './components/deleteAccount';
 import addProject from './components/addProject';
 import Project from './components/project'
 import UpdateTask from './components/updateTask';
+import Dnd from './components/dnd';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +25,6 @@ function App() {
     <div className="App">
       <ToastContainer/>
       <Navbar/>
-      
       <Switch>
       <Route path="/home" component={Home} />
       <Route path="/login" component={Login} />
@@ -37,6 +37,7 @@ function App() {
       <Route path="/logout" component={Logout} />
       <Route path="/profile" component={Profile} />
       <Route path="/delete-account" component={Deleteaccount} />
+      <Route path="/dnd" component={Dnd} />
       <Route path="/not-found" component={NotFound}/>
       <Redirect from="/"  exact to="/home" />
       <Redirect to="/not-found"/>

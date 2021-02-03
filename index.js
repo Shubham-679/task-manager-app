@@ -8,7 +8,7 @@ const users = require('./routes/user');
 const tasks = require('./routes/task');
 const projects = require('./routes/project');
 
-require('dotenv/config');
+// require('dotenv/config');
 
 app.use(cors());
 app.use(express.json());
@@ -22,8 +22,6 @@ app.use('/public', express.static('public'));
 //   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 // });
 
-
-
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.get('/*', (req,res) =>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
@@ -32,14 +30,14 @@ app.get('/*', (req,res) =>{
 // 'mongodb://localhost/Dummy'
 // process.env.mongoUri
 
-mongoose.connect(process.env.mongoUri,{
+mongoose.connect('mongodb://localhost/Dummy',{
      useNewUrlParser: true,
      useUnifiedTopology: true,
      useCreateIndex : true,
      useFindAndModify: false
 })
 .then(()=>{console.log(`Connected to mongoDB`)})
-.catch(()=>{console.log(`Connection failed`)})
+.catch(()=>{console.log(`Connection Failed`)})
 
 app.listen(port, () => {
     console.log(`Server is up and running on PORT ${port}`)

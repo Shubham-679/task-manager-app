@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import {  getUserTasks } from "../actions/taskAction";
 
 
-
+// https://blog.logrocket.com/react-drag-and-drop/
 const token = localStorage.getItem("x-auth-token");
 const AddTasks = (props) => {
 
@@ -32,14 +32,19 @@ const AddTasks = (props) => {
 
           <div className="container">
             <ul className="list-group">
+              <div className="row">
               {props.tasks.map((task) => (
+                <div className="col-6 social-icons">
                 <Link to={`/tasks/${task._id}`}  style={{textDecoration: 'none'}} key={task._id}>
-                <div className="list-group-item col-sm-5 card text-white bg-secondary mb-3 m-2">
+                <div className="list-group-item col-sm-5 card text-white bg-dark m-2" 
+                style={{maxWidth: '58rem'}}>
                 <div className="card-header">Task : {task.description}</div>
                 <h5 className="card-title">Project : {task.project.title}</h5>
                  </div>
                 </Link>
+                </div>
               ))}
+              </div>
             </ul>
           </div>
         </React.Fragment>
