@@ -15,7 +15,7 @@ const Tasks = (props) => {
   useEffect(() => {
     const taskId = props.match.params.id;
     dispatch(getTaskById(taskId));
-  }, [dispatch]);
+  }, [dispatch, props.match.params.id]);
 
   const handleChange = (e) => {
     const { value } = e.target;

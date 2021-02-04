@@ -1,34 +1,119 @@
-import React, { useState } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { v4 as uuid } from "uuid";
+import { connect, useDispatch } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import React, { useState, useEffect } from "react";
+import { getUserTasks, toggleTask } from "../actions/taskAction";
 
-const itemsFromBackend = [
-  { id: uuid(), content: "First task" },
-  { id: uuid(), content: "Second task" },
-  { id: uuid(), content: "Third task" },
-  { id: uuid(), content: "Fourth task" },
-  { id: uuid(), content: "Fifth task" },
-];
-const columnsFromBackend = {
-  [uuid()]: {
-    name: "To do",
-    items: itemsFromBackend,
-  },
-  [uuid()]: {
-    name: "In Progress",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Done",
-    items: [],
-  },
-};
-const Dnd = () => {
+const token = localStorage.getItem("x-auth-token");
+
+const Dnd = (props) => {
+  
+  const dispatch = useDispatch();
+  
+  
+  useEffect(() => {
+    const userId = props.users.user._id
+    dispatch(getUserTasks(userId));
+  }, [dispatch, props.users.user._id]);
+  
+  
+  const columnsFromBackend = {
+    [uuid()]: {
+      name: "Todo",
+      items: props.tasks.filter((a) => a.status === "todo"),
+    },
+    [uuid()]: {
+      name: "In Progress",
+      items: [],
+    },
+    [uuid()]: {
+      name: "Done",
+      items: [],
+    },
+  };
+  
   const [columns, setColumns] = useState(columnsFromBackend);
+  const onDragEnd = (result, columns, setColumns) => {
+
+    if (!result.destination) return;
+    const { source, destination } = result;
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId];
+      const destColumn = columns[destination.droppableId];
+      const sourceItems = [...sourceColumn.items];
+      const destItems = [...destColumn.items];
+      const [removed] = sourceItems.splice(source.index, 1);
+      if (removed.status === "process") {
+        if (destColumn.name === "Done") {
+          removed.status = "done";
+          dispatch(toggleTask(removed, token))
+        }
+        if (destColumn.name === "Todo") {
+          removed.status = "todo";
+          dispatch(toggleTask(removed, token))
+        }
+      }
+
+      if (removed.status === "done") {
+        if (destColumn.name === "In Progress") {
+          removed.status = "process";
+          dispatch(toggleTask(removed, token))
+        }
+        if (destColumn.name === "Todo") {
+          removed.status = "todo";
+          dispatch(toggleTask(removed, token))
+        }
+      }
+      if (removed.status === "todo") {
+        if (destColumn.name === "In Progress") {
+          removed.status = "process";
+          dispatch(toggleTask(removed, token))
+        }
+        if (destColumn.name === "Done") {
+          removed.status = "done";
+          dispatch(toggleTask(removed, token))
+        }
+      }
+      destItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems,
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems,
+        },
+      });
+    } else {
+      const column = columns[source.droppableId];
+      const copiedItems = [...column.items];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems,
+        },
+      });
+    }
+  };
+  console.log(columns)
+
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
+       {!token && (
+        <React.Fragment>
+          <Redirect to="/not-found" />
+        </React.Fragment>
+      )}
+      {token && (
+        <React.Fragment>
       <DragDropContext
-        onDragEnd={(result) => console.log(result)}
+        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
         {Object.entries(columns).map(([columnId, column], index) => {
           return (
@@ -36,11 +121,12 @@ const Dnd = () => {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center"
+                alignItems: "center",
               }}
               key={columnId}
             >
               <h2>{column.name}</h2>
+              
               <div style={{ margin: 8 }}>
                 <Droppable droppableId={columnId} key={columnId}>
                   {(provided, snapshot) => {
@@ -54,14 +140,14 @@ const Dnd = () => {
                             : "lightgrey",
                           padding: 4,
                           width: 250,
-                          minHeight: 500
+                          minHeight: 500,
                         }}
                       >
                         {column.items.map((item, index) => {
                           return (
                             <Draggable
-                              key={item.id}
-                              draggableId={item.id}
+                              key={item._id}
+                              draggableId={item._id}
                               index={index}
                             >
                               {(provided, snapshot) => {
@@ -79,10 +165,10 @@ const Dnd = () => {
                                         ? "#263B4A"
                                         : "#456C86",
                                       color: "white",
-                                      ...provided.draggableProps.style
+                                      ...provided.draggableProps.style,
                                     }}
                                   >
-                                    {item.content}
+                                    {item.description}
                                   </div>
                                 );
                               }}
@@ -99,8 +185,13 @@ const Dnd = () => {
           );
         })}
       </DragDropContext>
+      </React.Fragment>
+      )}
     </div>
   );
 };
-
-export default Dnd;
+const mapStateToProps = (state) => ({
+  users: state.users,
+  tasks: state.tasks,
+});
+export default connect(mapStateToProps)(Dnd);

@@ -12,7 +12,7 @@ router.get("/task/:id", async (req, res) => {
   try {
     const tasks = await Task.find({_id: req.params.id})
       .populate("project owner", "title name")
-      .select("description completed");
+      .select("description completed status");
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500);
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
   try {
     const tasks = await Task.find({project : req.params.id})
       .populate("owner", "name _id")
-      .select("description completed");
+      .select("description completed status");
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500).send(error);
@@ -38,7 +38,7 @@ router.get("/users/:id", async (req, res) => {
   try {
     const tasks = await Task.find({owner : req.params.id})
       .populate("project", "title description _id")
-      .select("description completed");
+      .select("description completed status");
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500).send(error);
@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
   })
   try {
     await task.save();
-    sendNewTaskEmail(user.email, user.name)
+    // sendNewTaskEmail(user.email, user.name)
     res.status(200).send(task);
   } catch (e) {
     res.status(400).send(e);
@@ -131,7 +131,7 @@ router.put('/task/:id', async (req, res) => {
     if (!task) {
       res.status(404).send();
     }
-    sendUpdateTaskEmail(user.email, user.name)
+    // sendUpdateTaskEmail(user.email, user.name)
     res.status(200).send(task);
 
   } catch (e) {

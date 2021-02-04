@@ -10,6 +10,10 @@ const taskSchema = new mongoose.Schema({
         type : Boolean,
         default : false  
      },
+     status : {
+      type : String,
+      default : 'todo'  
+   },
      owner : { 
       type : mongoose.Schema.Types.ObjectId,
       required : true,

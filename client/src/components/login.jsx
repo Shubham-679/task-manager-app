@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
 import React, { useState } from "react";
-import Joi from "joi-browser";
 import { findUser } from "../actions/userAction";
 import { toast } from "react-toastify";
 import Input from "../components/input"

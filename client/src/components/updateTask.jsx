@@ -11,13 +11,13 @@ const UpdateTask = (props) => {
   useEffect(() => {
     const taskId = props.match.params.id;
     dispatch(getUser()).then((res) => setUser(res));
-    dispatch(getTaskById(taskId)).then((res) => setTask(res));
-  }, [dispatch]);
+    dispatch(getTaskById(taskId));
+  }, [dispatch, props.match.params.id]);
 
   const [show, setShow] = useState(false);
   const [values, setValues] = useState({});
   const [users, setUser] = useState([]);
-  const [tasks, setTask] = useState();
+ 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 

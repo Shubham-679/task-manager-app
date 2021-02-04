@@ -6,7 +6,7 @@ import { getUser } from "../actions/userAction";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 
-const token = localStorage.getItem("x-auth-token");
+
 const Project = (props) => {
   const dispatch = useDispatch();
   const [projectValues, setProjectValues] = useState([{}]);
@@ -27,7 +27,7 @@ const Project = (props) => {
     dispatch(findProject(projectId)).then((res) => setProjectValues(res));
     dispatch(getUser()).then((res) => setUser(res));
     dispatch(getTasks(projectId)).then((res) => setTask(res));
-  }, [dispatch]);
+  }, [dispatch, props.match.params.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
