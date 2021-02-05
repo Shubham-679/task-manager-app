@@ -1,7 +1,9 @@
 import { Redirect,Link } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { Button, Modal }  from "react-bootstrap"
+import Input from "./input"
+import { Button, Modal }  from "react-bootstrap";
+import { toast } from "react-toastify";
 import {
   addProject,
   getProjects,
@@ -19,28 +21,55 @@ const AddProject = (props) => {
 
   const [show, setShow] = useState(false);
   const [values, setValues] = useState(initialValues);
-  // const [projects, setProject] = useState(props.projects);
+  const [errors , setErrors] = useState({});
+
   const dispatch = useDispatch();
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   useEffect(() => {
     dispatch(getProjects(token));
   }, [dispatch]);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const err = errors
+    const { name, value } = e.currentTarget;
+    const errorMessages = validateProperty(name, value);
+    if (errorMessages) err[name] = errorMessages;
+    else delete err[name];
+    setErrors(errors=> err || {})
     setValues({
       ...values,
       [name]: value,
     });
   };
 
+  const validateProperty = (name, value) => {
+    if(name === "title"){
+        if(value.trim() === '') return 'Title Is Required'
+    }
+    if(name === "description"){
+        if(value.trim() === '') return 'Description Is Required'
+    }
+};
+
+  const validate = () => {
+    const errors= {}
+     if(values.title.trim() === "")
+       errors.title = "Title is required"
+     if(values.description.trim() === "")
+       errors.description = " Description is required"
+     return Object.keys(errors).length === 0 ? null : errors;
+  
+ };
+ 
+
   const handleSubmit =  (e) => {
     e.preventDefault();
-    console.log(values)
-    dispatch(addProject(values))  
+    const er = validate();
+    setErrors(errors => er || {});
+    if (er) return
+    dispatch(addProject(values))
   };
 
   const handleRemove = async (project) => {
@@ -48,7 +77,8 @@ const AddProject = (props) => {
   };
 
   return (
-    <div className="container">
+    <React.Fragment>
+
       {!token && !props.users.isAdmin && (
         <React.Fragment>
           <Redirect to="/not-found" />
@@ -57,13 +87,12 @@ const AddProject = (props) => {
 
       {token && props.users.isAdmin &&(
         <React.Fragment>
-          <div className="m-5">
+
+          <div className="container mt-4">
             <h1> Welcome </h1>
-            <h5> Now You Can Add Your Tasks... Here </h5>
+            <h5> Now You Can Manage Your Project and Tasks... Here </h5>
+          <Button className=" btn btn-lg mt-3" variant="primary" onClick={handleShow}>New Project</Button>
           </div>
-          <Button variant="primary" onClick={handleShow}>
-            New Project
-          </Button>
 
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -73,61 +102,63 @@ const AddProject = (props) => {
             <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="title" className="form-label">Title</label>
-            <input
+            <Input
               value={values.title}
               onChange={handleInputChange}
               name="title"
               type="text"
               placeholder="Title"
               className="form-control"
+              error ={errors.title}
             />
           </div>
           <div className="mb-3">
             <label htmlFor="password" className="form-label">Description</label>
-            <input
+            <Input
               value={values.description}
               onChange={handleInputChange}
               name="description"
               type="text"
               placeholder="Description"
-              className="form-control"/>
+              className="form-control"
+              error ={errors.description}
+              />
           </div>
           <div className="mb-3">
-              <Button variant="primary" type="submit" onClick={handleClose}>
-                Submit
-              </Button>
+            <Button variant="primary" type="submit" onClick={handleClose}>Submit</Button>
           </div>
         </form>
             </Modal.Body>
           </Modal>
 
-          <div className="container mt-5">
-            <ul className="col-12 list-group">
+          <div className="mt-5">
+            <ul className="container">
                 {props.projects.map(project => (
-                    <li className="row list-group-item" 
+                    <li className="list-group-item" 
                     key={project._id}
-                    >
-                      <div className="text-left">
-                        <Link to={`/project/${project._id}`}><i class="fa fa-eye"></i></Link>
+                    > <div className="row">
+                      <div className="col-5 text-left">
+                        <h4>{project.title} </h4>
                       </div>
-                      <div className="col-4 float-left">
-                        <p>Title : {project.title} </p>
-                      </div>
-                      <div className="col-4 float-left">
+                      <div className="col-5 text-left">
                         <p>Description : {project.description} </p>
                       </div>
-                        <div className="text-right">
+                      <div className="col-1">
+                        <Link to={`/project/${project._id}`}><i class="fa fa-eye"></i></Link>
+                      </div>
+                        <div className="col-1">
                         <i className="fa fa-trash" aria-hidden="true" 
                         onClick={() => handleRemove(project)} 
                         style={{ cursor: "pointer"}}></i>
                         </div>
+                    </div>
                     </li>
                 ))}
             </ul>
           </div>
         </React.Fragment>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 const mapStateToProps = (state) => ({

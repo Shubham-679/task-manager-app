@@ -81,6 +81,7 @@ const validate = () => {
            placeholder="Enter Your Email"
            error={errors.email}
            className="form-control"
+           maxlength="30"
            />
             <small id="emailHelp" className="form-text mark">
               We'll never share your email with anyone else.
@@ -98,6 +99,7 @@ const validate = () => {
               placeholder="Enter Your Password"
               className="form-control"
               error={errors.password}
+              maxlength="10"
             />
           </div>
           <div className="mb-3">

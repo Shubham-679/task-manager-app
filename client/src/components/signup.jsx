@@ -95,6 +95,7 @@ const Signup = (props) => {
               placeholder="Enter Your Name"
               error={errors.name}
               className="form-control"
+              maxlength="25"
             />
           </div>
           <div className="mb-2">
@@ -107,6 +108,7 @@ const Signup = (props) => {
               placeholder="Enter Your Email"
               className="form-control"
               error={errors.email}
+              maxlength="30"
             />
           </div>
           <div className="mb-2">
@@ -119,6 +121,7 @@ const Signup = (props) => {
               placeholder="Enter Your Password"
               className="form-control"
               error={errors.password}
+              maxlength="10"
             />
           </div>
           <div className="mb-2">
@@ -130,6 +133,7 @@ const Signup = (props) => {
               placeholder="Enter Your Age"
               className="form-control"
               error={errors.age}
+              maxlength="2"
             />
           </div>
           <button className="btn btn-dark btn-lg btn-block" type="submit">Submit</button>

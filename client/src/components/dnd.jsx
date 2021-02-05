@@ -29,7 +29,6 @@ const Dnd = (props) => {
           name: "Done",
           items: res.filter((a) => a.status === "done"),
         },
-
       })
     })
     
