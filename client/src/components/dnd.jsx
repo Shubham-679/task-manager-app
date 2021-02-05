@@ -11,31 +11,31 @@ const Dnd = (props) => {
   
   const dispatch = useDispatch();
   
-  
+  const [columns, setColumns] = useState([]);
+
   useEffect(() => {
     const userId = props.users.user._id
-    dispatch(getUserTasks(userId));
-  }, [dispatch, props.users.user._id]);
-  
-  
-  const columnsFromBackend = {
-    [uuid()]: {
-      name: "Todo",
-      items: props.tasks.filter((a) => a.status === "todo"),
-    },
-    [uuid()]: {
-      name: "In Progress",
-      items: [],
-    },
-    [uuid()]: {
-      name: "Done",
-      items: [],
-    },
-  };
-  
-  const [columns, setColumns] = useState(columnsFromBackend);
-  const onDragEnd = (result, columns, setColumns) => {
+    dispatch(getUserTasks(userId)).then((res) => {
+      setColumns({
+        [uuid()]: {
+          name: "Todo",
+          items: res.filter((a) => a.status === "todo"),
+        },
+        [uuid()]: {
+          name: "In Progress",
+          items: res.filter((a) => a.status === "process"),
+        },
+        [uuid()]: {
+          name: "Done",
+          items: res.filter((a) => a.status === "done"),
+        },
 
+      })
+    })
+    
+  }, []);
+  
+  const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -163,7 +163,7 @@ const Dnd = (props) => {
                                       minHeight: "50px",
                                       backgroundColor: snapshot.isDragging
                                         ? "#263B4A"
-                                        : "#456C86",
+                                        : "#2d4059",
                                       color: "white",
                                       ...provided.draggableProps.style,
                                     }}
@@ -192,6 +192,5 @@ const Dnd = (props) => {
 };
 const mapStateToProps = (state) => ({
   users: state.users,
-  tasks: state.tasks,
 });
 export default connect(mapStateToProps)(Dnd);
