@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import React, { useState } from "react";
 import { findUser } from "../actions/userAction";
+import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import Input from "../components/input"
 
@@ -14,21 +15,44 @@ const Login = (props) => {
   const [values, setValues] = useState(initialValues);
   const dispatch = useDispatch();
 
+  const schema = {
+    email: Joi.string()
+      .required()
+      .email()
+      .label("Email"),
+    password: Joi.number()
+      .required()
+      .min(7)
+      .max(10)
+      .label("Password"),
+  };
+
   const validateProperty = (name, value) => {
-        if(name === "email"){
-            if(value.trim() === '') return 'Email Is Required'
-        }
-        if(name === "password"){
-            if(value.trim() === '') return 'Password Is Required'
-        }
+    const obj = { [name]: value };
+    const nschema = { [name]: schema[name] };
+    const { error } = Joi.validate(obj, nschema);
+    return error ? error.details[0].message : null;
+
+        // if(name === "email"){
+        //     if(value.trim() === '') return 'Email Is Required'
+        // }
+        // if(name === "password"){
+        //     if(value.trim() === '') return 'Password Is Required'
+        // }
 };
 const validate = () => {
-   const errors= {}
-    if(values.email.trim() === "")
-      errors.email = "Email is required"
-    if(values.password.trim() === "")
-      errors.password = " Password is required"
-    return Object.keys(errors).length === 0 ? null : errors;
+  const options = { abortEarly: false };
+  const { error } = Joi.validate(values, schema, options);
+  if (!error) return null;
+  const errors = {};
+  for (let item of error.details) errors[item.path[0]] = item.message;
+  return errors;
+  //  const errors= {}
+  //   if(values.email.trim() === "")
+  //     errors.email = "Email is required"
+  //   if(values.password.trim() === "")
+  //     errors.password = " Password is required"
+  //   return Object.keys(errors).length === 0 ? null : errors;
  
 };
 

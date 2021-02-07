@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../actions/userAction";
+import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import Input from '../components/input';
 
@@ -16,36 +17,68 @@ const Signup = (props) => {
   const [values, setValues] = useState(initialValues);
   const dispatch = useDispatch();
 
+  const schema = {
+    name : Joi.string()
+      .required()
+      .label("Name"),
+    email: Joi.string()
+      .required()
+      .email()
+      .label("Email"),
+    password: Joi.number()
+      .required()
+      .min(7)
+      .max(10)
+      .label("Password"),
+    age: Joi.number()
+      .required()
+      .integer()
+      .min(1)
+      .max(2)
+      .label("Age")
+  };
+
 
   const validateProperty = (name, value) => {
-    if(name === "name"){
-        if(value.trim() === '') return 'Name Is Required'
-    }
-    if(name === "email"){
-      if(value.trim() === '') return 'Email Is Required'
-  }
-    if(name === "password"){
-        if(value.trim() === '') return 'Password Is Required'
-    }
-    if(name === "age"){
-      if(value.trim() === '') return 'Age Is Required'
-  }
+    const obj = { [name]: value };
+    const nschema = { [name]: schema[name] };
+    const { error } = Joi.validate(obj, nschema);
+    return error ? error.details[0].message : null;
+
+  //   if(name === "name"){
+  //       if(value.trim() === '') return 'Name Is Required'
+  //   }
+  //   if(name === "email"){
+  //     if(value.trim() === '') return 'Email Is Required'
+  // }
+  //   if(name === "password"){
+  //       if(value.trim() === '') return 'Password Is Required'
+  //   }
+  //   if(name === "age"){
+  //     if(value.trim() === '') return 'Age Is Required'
+  // }
   };
 
   const validate = () => {
-  const errors= {}
-  if(values.name.trim() === "")
-    errors.name = "Name is required"
+    const options = { abortEarly: false };
+    const { error } = Joi.validate(values, schema, options);
+    if (!error) return null;
+    const errors = {};
+    for (let item of error.details) errors[item.path[0]] = item.message;
+    return errors;
+  // const errors= {}
+  // if(values.name.trim() === "")
+  //   errors.name = "Name is required"
 
-  if(values.email.trim() === "")
-    errors.email = " Email is required"
+  // if(values.email.trim() === "")
+  //   errors.email = " Email is required"
 
-  if(values.email.trim() === "")
-    errors.password = "Password is required"
+  // if(values.email.trim() === "")
+  //   errors.password = "Password is required"
 
-  if(values.age.trim() === "")
-    errors.age = " Age is required"
-  return Object.keys(errors).length === 0 ? null : errors;
+  // if(values.age.trim() === "")
+  //   errors.age = " Age is required"
+  // return Object.keys(errors).length === 0 ? null : errors;
 
   };
 
@@ -66,7 +99,6 @@ const Signup = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const er = validate();
-    console.log(er)
     setErrors(errors => er || {});
     if (er) return;
     dispatch(addUser(values))
@@ -86,7 +118,7 @@ const Signup = (props) => {
       <h1 className="m-3"> New Registration</h1>
       <div className="d-flex justify-content-center">
         <form onSubmit={handleSubmit}>
-          <div className="mb-2">
+          <div className="mb-2 form-group">
             <label className="form-label float-left" htmlFor="Name">Name</label>
             <Input
               value={values.name}
@@ -98,7 +130,7 @@ const Signup = (props) => {
               maxlength="25"
             />
           </div>
-          <div className="mb-2">
+          <div className="mb-2 form-group">
             <label className="form-label float-left" htmlFor="Email"> E-mail</label>
             <Input
               value={values.email}
@@ -111,7 +143,7 @@ const Signup = (props) => {
               maxlength="30"
             />
           </div>
-          <div className="mb-2">
+          <div className="mb-2 form-group">
             <label className="form-label float-left" htmlFor="Password">Password</label>
             <Input
               value={values.password}
@@ -124,7 +156,7 @@ const Signup = (props) => {
               maxlength="10"
             />
           </div>
-          <div className="mb-2">
+          <div className="mb-2 form-group">
             <label className="form-label float-left" htmlFor="Age">Age</label>
             <Input
               value={values.age}
@@ -136,7 +168,7 @@ const Signup = (props) => {
               maxlength="2"
             />
           </div>
-          <button className="btn btn-dark btn-lg btn-block" type="submit">Submit</button>
+          <button className="btn btn-dark btn-lg btn-block mt-4" type="submit">Submit</button>
         </form>
       </div>
     </div>
