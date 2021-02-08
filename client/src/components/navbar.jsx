@@ -28,7 +28,7 @@ const Navbar = ({users}) => {
                                 <React.Fragment>
                                 <Link className="navbar-brand" to="/home">Home</Link>
                                 <NavLink className="nav-link" to="/addproject">Projects</NavLink>
-                                <NavLink className="nav-link" to="/profile">Profile</NavLink>
+                                {/* <NavLink className="nav-link" to="/profile">Profile</NavLink> */}
                                 {/* <NavLink className="nav-link" to="/delete-account">Delete Account</NavLink> */}
                                 <NavLink className="nav-link" to="/logout">Logout</NavLink>
                                 </React.Fragment>

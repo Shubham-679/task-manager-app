@@ -13,7 +13,7 @@ const Input = ({value, onChange, name, type, error, label, placeholder, maxlengt
               type={type}
               placeholder={placeholder}
               className="form-control form-control-lg"
-              maxlength={maxlength}
+              maxLength={maxlength}
               
               style={{width:"150"}}
             />  

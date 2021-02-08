@@ -6,18 +6,17 @@ const taskSchema = new mongoose.Schema({
         required:true,
         trim : true
     },
-    completed : {
-        type : Boolean,
-        default : false  
-     },
      status : {
       type : String,
       default : 'todo'  
    },
      owner : { 
-      type : mongoose.Schema.Types.ObjectId,
-      required : true,
-      ref : 'User'
+      type : new mongoose.Schema({
+        name: {
+            type: String,
+            required: true,
+          }
+    }),required: true,
     },
     project : { 
       type : mongoose.Schema.Types.ObjectId,
@@ -27,6 +26,7 @@ const taskSchema = new mongoose.Schema({
 },{
   timestamps : true
 })
+
 
 // module.exports.taskSchema = taskSchema;
 const Task = mongoose.model('Task', taskSchema)

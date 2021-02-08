@@ -3,6 +3,7 @@ const Task = require("../model/taskModel");
 const router = express.Router();
 const auth = require("../middlewares/auth");
 const User = require('../model/userModel');
+var ObjectId = require('mongodb').ObjectID;
 const Project = require("../model/projectModel");
 const { sendNewTaskEmail, sendUpdateTaskEmail } = require('../middlewares/email')
 
@@ -11,8 +12,8 @@ const { sendNewTaskEmail, sendUpdateTaskEmail } = require('../middlewares/email'
 router.get("/task/:id", async (req, res) => {
   try {
     const tasks = await Task.find({_id: req.params.id})
-      .populate("project owner", "title name")
-      .select("description completed status");
+      .populate("project", "title")
+      // .select("description completed status");
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500);
@@ -24,8 +25,7 @@ router.get("/task/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const tasks = await Task.find({project : req.params.id})
-      .populate("owner", "name _id")
-      .select("description completed status");
+      // .select("description status");
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500).send(error);
@@ -36,12 +36,16 @@ router.get("/:id", async (req, res) => {
 
 router.get("/users/:id", async (req, res) => {
   try {
-    const tasks = await Task.find({owner : req.params.id})
+    console.log(req.params.id)
+
+    // const tasks = await Task.find({owner: {$in: [{_id: ObjectId(req.params.id)}]}} )
+    const tasks = await Task.find({'owner._id': req.params.id})
       .populate("project", "title description _id")
-      .select("description completed status");
+      .select("description status");
     res.status(201).send(tasks);
   } catch (error) {
     res.status(500).send(error);
+    console.log(error)
   }
 });
 
@@ -55,11 +59,14 @@ router.post("/", async (req, res) => {
   
   const task = new Task({
     description: req.body.task,
-    owner: user._id,
+    owner: {
+      _id : user._id,
+      name : user.name
+    },
     project : project._id
   })
   try {
-    await task.save();
+    await task.save()
     // sendNewTaskEmail(user.email, user.name)
     res.status(200).send(task);
   } catch (e) {
@@ -123,7 +130,10 @@ router.put('/task/:id', async (req, res) => {
 
     const task = await Task.findByIdAndUpdate(req.params.id, {
       description : req.body.task,
-      owner : req.body.user
+      owner : {
+        _id : user._id,
+        name : user.name
+      }
     }, {
       new: true,
       runValidators: true

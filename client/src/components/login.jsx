@@ -22,8 +22,6 @@ const Login = (props) => {
       .label("Email"),
     password: Joi.number()
       .required()
-      .min(7)
-      .max(10)
       .label("Password"),
   };
 

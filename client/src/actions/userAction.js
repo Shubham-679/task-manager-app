@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const addUser = (values) => async (dispatch) => {
-  const { data: newUser } = await axios.post("http://localhost:3000/users",values);
+  const { data: newUser } = await axios.post("/users",values);
   dispatch({
     type: "ADD_USER",
     payload: newUser,
@@ -9,7 +9,7 @@ export const addUser = (values) => async (dispatch) => {
 };
 
 export const findUser = (values) => async (dispatch) => {
-  const { data: user } = await axios.post("http://localhost:3000/users/login",values);
+  const { data: user } = await axios.post("/users/login",values);
   dispatch({
     type: "FIND_USER",
     payload: user,
@@ -18,7 +18,7 @@ export const findUser = (values) => async (dispatch) => {
 };
 
 export const logoutUser = (token) => async (dispatch) => {
-  const { data: user } = await axios.get("http://localhost:3000/users/logout", {
+  const { data: user } = await axios.get("/users/logout", {
     headers: {"x-auth-token": token},
   });
   dispatch({
@@ -28,7 +28,7 @@ export const logoutUser = (token) => async (dispatch) => {
 };
 
 export const updateUser = (values, token) => async (dispatch) => {
-  const { data: user } = await axios.patch("http://localhost:3000/users/me",values,
+  const { data: user } = await axios.patch("/users/me",values,
     {headers: {"x-auth-token": token},
     });
   dispatch({
@@ -38,7 +38,7 @@ export const updateUser = (values, token) => async (dispatch) => {
 };
 
 export const getUser = () => async (dispatch) => {
-  const { data: users } = await axios.get("http://localhost:3000/users",);
+  const { data: users } = await axios.get("/users",);
   dispatch({
     type: "GET_USER",
     payload: users,
@@ -48,7 +48,7 @@ export const getUser = () => async (dispatch) => {
 
 
 export const addProfileImg = (data , token) => async (dispatch) => {
-    const {data : newPhoto} = await axios.put("http://localhost:3000/users/me/profileImg", data , {
+    const {data : newPhoto} = await axios.put("/users/me/profileImg", data , {
       headers: {
         "x-auth-token": token,
         'Content-Type': 'multipart/form-data'
@@ -62,7 +62,7 @@ export const addProfileImg = (data , token) => async (dispatch) => {
   };
   
   export const removeUser = (token) => async (dispatch) => {
-    const user = await axios.delete("/http://localhost:3000/users/me", {
+    const user = await axios.delete("/users/me", {
       headers: {
         "x-auth-token": token
       },

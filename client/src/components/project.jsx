@@ -5,14 +5,16 @@ import { addTask, getTasks } from "../actions/taskAction";
 import { getUser } from "../actions/userAction";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
+import Input from "./input"
 
 
 const Project = (props) => {
   const dispatch = useDispatch();
   const [projectValues, setProjectValues] = useState([{}]);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({task:'', user:''});
   const [users, setUser] = useState([]);
   const [tasks, setTask] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -29,8 +31,43 @@ const Project = (props) => {
     dispatch(getTasks(projectId)).then((res) => setTask(res));
   }, [dispatch, props.match.params.id]);
 
+  const validateProperty = (name, value) => {
+    if (name === "title") {
+      if (value.trim() === "") return "Title Is Required";
+    }
+    if (name === "description") {
+      if (value.trim() === "") return "Description Is Required";
+    }
+  };
+  const validatePropertyTask = (name, value) => {
+    if (name === "task") {
+      if (value.trim() === "") return "Task Is Required";
+    }
+    if (name === "user") {
+      if (value.trim() === "") return "User Is Required";
+    }
+  };
+
+  const validate = () => {
+    const errors = {};
+    if (projectValues.title.trim() === "") errors.title = "Title is required";
+    if (projectValues.description.trim() === "") errors.description = "Description is required";
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
+  const validateTask = () => {
+    const errors = {};
+    if (values.task.trim() === "") errors.task = "Task is required";
+    if (values.user.trim() === "") errors.user = "User is required";
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const err = errors;
+    const { name, value } = e.currentTarget;
+    const errorMessages = validateProperty(name, value);
+    if (errorMessages) err[name] = errorMessages;
+    else delete err[name];
+    setErrors((errors) => err || {});
     setProjectValues({
       ...projectValues,
       [name]: value,
@@ -39,13 +76,22 @@ const Project = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const er = validate();
+    setErrors((errors) => er || {});
+    if (er) return;
     dispatch(updateProject(projectValues)).then((res) => {
       setProjectValues((projectValues) => res);
     });
+    handleClose()
   };
 
   const handleInputChangeTask = (e) => {
-    const { name, value } = e.target;
+    const err = errors;
+    const { name, value } = e.currentTarget;
+    const errorMessages = validatePropertyTask(name, value);
+    if (errorMessages) err[name] = errorMessages;
+    else delete err[name];
+    setErrors((errors) => err || {});
     setValues({
       ...values,
       [name]: value,
@@ -54,13 +100,16 @@ const Project = (props) => {
 
   const handleSubmitTask = (e) => {
     e.preventDefault();
+    const er = validateTask();
+    setErrors((errors) => er || {});
+    if (er) return;
     const projectId = props.match.params.id;
     dispatch(addTask(values, projectId)).then((res) => {
       setTask((tasks) => [res, ...tasks]);
     });
-    window.location.reload();
+    setValues({task:'', user:''})
+    handleClose1()
   };
-  console.log(props.users.isAdmin)
 
   return (
     <div>
@@ -72,12 +121,12 @@ const Project = (props) => {
       {props.users.isAdmin && (
         <React.Fragment>
           <div
-            className="col-sm-10 card text-white bg-secondary mb-3 mt-4 "
+            className="col-sm-10 card text-white bg-dark mb-3 mt-4 "
             style={{ marginLeft: "100px" }}
           >
-            <div className="card-header">title : {projectValues.title}</div>
-            <h5 className="card-title">
-              description : {projectValues.description}
+            <h1 className="card-header">Title : {projectValues.title}</h1>
+            <h5 className="card-title mt-2">
+              Description : {projectValues.description}
             </h5>
             <div>
               <Button
@@ -95,29 +144,30 @@ const Project = (props) => {
           <div className="m-2">
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
-                <Modal.Title>New Project</Modal.Title>
+                <Modal.Title>Update Project</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <form onSubmit={handleSubmit}>
+                <form>
                   <div className="mb-3">
-                    <label htmlFor="title" className="form-label">
+                    <label htmlFor="Title" className="form-label">
                       Title
                     </label>
-                    <input
+                    <Input
                       value={projectValues.title}
                       onChange={handleInputChange}
                       name="title"
                       type="text"
                       placeholder="Title"
                       className="form-control"
+                      error={errors.title}
                     />
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
+                    <label htmlFor="Password" className="form-label">
                       Description
                     </label>
-                    <input
+                    <textarea
                       value={projectValues.description}
                       onChange={handleInputChange}
                       name="description"
@@ -125,12 +175,17 @@ const Project = (props) => {
                       placeholder="Description"
                       className="form-control"
                     />
+                    <div>
+                  {errors.description && (
+                    <small className="text-danger">{errors.description}</small>
+                  )}
+                </div>
                   </div>
                   <div className="mb-3">
                     <Button
                       variant="primary"
                       type="submit"
-                      onClick={handleClose}
+                      onClick={handleSubmit}
                     >
                       Submit
                     </Button>
@@ -146,12 +201,12 @@ const Project = (props) => {
                 <Modal.Title>Assign Task</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <form onSubmit={handleSubmitTask}>
+                <form>
                   <div className="mb-3">
-                    <label htmlFor="task" className="form-label">
+                    <label htmlFor="Task" className="form-label">
                       Task
                     </label>
-                    <input
+                    <textarea
                       value={values.task}
                       onChange={handleInputChangeTask}
                       name="task"
@@ -159,9 +214,12 @@ const Project = (props) => {
                       placeholder="Task"
                       className="form-control"
                     />
+                    {errors.task && (
+                    <small className="text-danger">{errors.task}</small>
+                  )}
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="user" className="form-label">
+                    <label htmlFor="User" className="form-label">
                       User
                     </label>
                     <select
@@ -179,12 +237,17 @@ const Project = (props) => {
                         </option>
                       ))}
                     </select>
+                    <div>
+                  {errors.user && (
+                    <small className="text-danger">{errors.user}</small>
+                  )}
+                </div>
                   </div>
                   <div className="mb-3">
                     <Button
                       variant="primary"
                       type="submit"
-                      onClick={handleClose1}
+                      onClick={handleSubmitTask}
                     >
                       Submit
                     </Button>
@@ -200,8 +263,8 @@ const Project = (props) => {
                   className="col-sm-5 card text-white bg-dark mb-3 m-2"
                   key={task._id}
                 >
+                  <h3 className="card-title mt-3">{task.owner.name}</h3>
                   <div className="card-header">Task : {task.description}</div>
-                  <h5 className="card-title">User : {task.owner.name}</h5>
                   <Link
                     to={`/updatetask/${task._id}`}
                     className="stretched-link"

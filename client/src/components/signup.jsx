@@ -27,14 +27,10 @@ const Signup = (props) => {
       .label("Email"),
     password: Joi.number()
       .required()
-      .min(7)
-      .max(10)
       .label("Password"),
     age: Joi.number()
       .required()
       .integer()
-      .min(1)
-      .max(2)
       .label("Age")
   };
 
@@ -88,6 +84,7 @@ const Signup = (props) => {
     const errorMessages = validateProperty(name, value);
     if (errorMessages) err[name] = errorMessages;
     else delete err[name];
+    console.log(values)
     
     setValues({
       ...values,
@@ -100,6 +97,7 @@ const Signup = (props) => {
     e.preventDefault();
     const er = validate();
     setErrors(errors => er || {});
+    console.log(er)
     if (er) return;
     dispatch(addUser(values))
     .then(()=>{
