@@ -7,6 +7,7 @@ import { Link, withRouter, Redirect } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import Input from "./input"
 
+const token = localStorage.getItem("x-auth-token");
 
 const Project = (props) => {
   const dispatch = useDispatch();
@@ -26,9 +27,9 @@ const Project = (props) => {
 
   useEffect(() => {
     const projectId = props.match.params.id;
-    dispatch(findProject(projectId)).then((res) => setProjectValues(res));
-    dispatch(getUser()).then((res) => setUser(res));
-    dispatch(getTasks(projectId)).then((res) => setTask(res));
+    dispatch(findProject(projectId, token)).then((res) => setProjectValues(res));
+    dispatch(getUser(token)).then((res) => setUser(res));
+    dispatch(getTasks(projectId, token)).then((res) => setTask(res));
   }, [dispatch, props.match.params.id]);
 
   const validateProperty = (name, value) => {
@@ -79,7 +80,7 @@ const Project = (props) => {
     const er = validate();
     setErrors((errors) => er || {});
     if (er) return;
-    dispatch(updateProject(projectValues)).then((res) => {
+    dispatch(updateProject(projectValues, token)).then((res) => {
       setProjectValues((projectValues) => res);
     });
     handleClose()
@@ -104,7 +105,7 @@ const Project = (props) => {
     setErrors((errors) => er || {});
     if (er) return;
     const projectId = props.match.params.id;
-    dispatch(addTask(values, projectId)).then((res) => {
+    dispatch(addTask(values, projectId, token)).then((res) => {
       setTask((tasks) => [res, ...tasks]);
     });
     setValues({task:'', user:''})

@@ -65,7 +65,7 @@ const AddProject = (props) => {
     const er = validate();
     setErrors((errors) => er || {});
     if (er) return;
-    dispatch(addProject(values));
+    dispatch(addProject(values,token));
     setValues({
       title: "",
       description: "",

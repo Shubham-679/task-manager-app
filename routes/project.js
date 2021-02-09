@@ -5,7 +5,7 @@ const auth = require("../middlewares/auth");
 const { Task } = require("../model/taskModel");
 
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     try {
       const project = await Project.find();
       res.status(201).send(project);
@@ -14,9 +14,8 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
-    console.log(req.params.id)
     const project = await Project.findById(req.params.id)
     .populate('user' ,"name")
     res.status(201).send(project);
@@ -25,7 +24,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const project = new Project({
       title: req.body.title,
       description : req.body.description
@@ -40,10 +39,8 @@ router.post("/", async (req, res) => {
   });
 
 
-router.put("/", async (req, res) => {
+router.put("/", auth, async (req, res) => {
   try {
-    console.log(req.body)
-    
     const project = await Project.findByIdAndUpdate(req.body._id, {
       title: req.body.title,
       description : req.body.description,

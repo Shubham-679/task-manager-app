@@ -4,15 +4,15 @@ import { getTaskById, updateTask, removeTask } from "../actions/taskAction";
 import { Button, Modal } from "react-bootstrap";
 import { getUser } from "../actions/userAction";
 import { Redirect } from "react-router-dom";
-import Input from "./input"
+
 
 const token = localStorage.getItem("x-auth-token");
 const UpdateTask = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     const taskId = props.match.params.id;
-    dispatch(getUser()).then((res) => setUser(res));
-    dispatch(getTaskById(taskId));
+    dispatch(getUser(token)).then((res) => setUser(res));
+    dispatch(getTaskById(taskId, token));
   }, [dispatch, props.match.params.id]);
 
   const [show, setShow] = useState(false);
@@ -56,7 +56,7 @@ const UpdateTask = (props) => {
     const er = validate();
     setErrors((errors) => er || {});
     if (er) return;
-    dispatch(updateTask(values, props.match.params.id));
+    dispatch(updateTask(values,token, props.match.params.id));
     setValues({task:'', user:''})
     handleClose()
   };
@@ -132,7 +132,7 @@ const UpdateTask = (props) => {
           <div className="container mt-5">
             <ul className="list-group">
               {props.tasks.map((task) => (
-                <li className="list-group-item">
+                <li className="list-group-item" key={task._id}>
                   <div className="row">
                     <h5 className="col-5 text-left">{task.description}</h5>
                     <p className="col-2">User : {task.owner.name}</p>

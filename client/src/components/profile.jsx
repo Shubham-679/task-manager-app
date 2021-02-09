@@ -35,7 +35,6 @@ const Profile = (props) => {
 
   let image;
   const onChangeHandler = (event) => {
-    console.log(event.target.files[0]);
     image = event.target.files[0];
   };
   const onClickHandler = (event) => {

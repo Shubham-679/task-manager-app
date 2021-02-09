@@ -12,7 +12,7 @@ const AddTasks = (props) => {
 
   useEffect(() => {
     const userId = props.users.user._id
-    dispatch(getUserTasks(userId));
+    dispatch(getUserTasks(userId, token));
   }, [dispatch, props.users.user._id]);
 
   return (

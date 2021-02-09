@@ -15,7 +15,7 @@ router.get('/me' , auth , async (req, res) => {
     }
 })
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     try {
       const users = await User.find().select('-password');
       const user = users.filter((a)=> !a.isAdmin)
@@ -49,17 +49,6 @@ router.post('/login',  async (req, res) => {
         res.status(400).send(e)
     }
 })
-
-// router.post('/login/admin',  async (req, res) => {
-//     try {
-//         const user = await User.findByCredentials(req.body.email, req.body.password)
-//         const token = await user.generateAuthToken();
-//         res.status(201).send({ user , token});
-//     } catch (e) {
-//         console.log(e);
-//         res.status(400).send(e)
-//     }
-// })
 
 router.get('/logout', auth, async (req, res)=>{
     try {
