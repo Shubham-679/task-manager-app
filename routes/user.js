@@ -1,118 +1,106 @@
 const express = require("express");
-const User = require("../model/userModel");
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const multer = require("multer");
+const User = require("../model/userModel");
 const auth = require('../middlewares/auth')
 
-const multer = require("multer");
-
-router.get('/me' , auth , async (req, res) => {
+router.get('/me', auth, async (req, res) => {
     try {
         const users = await User.find().select('-password');
-        res.status(201).send(users)
-    } catch (error) {
-        res.status(500)
+        res.status(201).send(users);
+    } catch (e) {
+        res.status(500).send(e)
+        console.log(e);
     }
 })
 
 router.get("/", auth, async (req, res) => {
     try {
-      const users = await User.find().select('-password');
-      const user = users.filter((a)=> !a.isAdmin)
-      res.status(201).send(user);
-    } catch (error) {
-      res.status(500);
+        const users = await User.find().select('-password');
+        const user = users.filter((a) => !a.isAdmin)
+        res.status(201).send(user);
+    } catch (e) {
+        res.status(500).send(e);
+        console.log(e);
     }
 });
 
-router.post('/' , async (req, res) => {
+router.post('/', async (req, res) => {
     const user = new User(req.body)
     try {
-        const salt = await bcrypt.genSalt(10);  
-        user.password = await bcrypt.hash(user.password , salt);
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
         await user.save();
         const token = await user.generateAuthToken();
         res.header('x-auth-token', token).status(201).send(user);
     } catch (e) {
         res.status(400).send(e);
-        console.log(e)
+        console.log(e);
     }
 })
 
-router.post('/login',  async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken();
-        res.status(201).send({ user , token});
+        res.status(201).send({user,token});
     } catch (e) {
-        console.log(e);
         res.status(400).send(e)
+        console.log(e);
     }
 })
 
-router.get('/logout', auth, async (req, res)=>{
+router.get('/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter(token => token.token != req.token)
         await req.user.save()
         res.send()
     } catch (e) {
-        res.status(400).send()
+        res.status(400).send(e);
+        console.log(e);
     }
 })
 
 
-router.patch('/me', auth, async(req, res)=>{
-
+router.patch('/me', auth, async (req, res) => {
     const updates = Object.keys(req.body)
-    
-    const allowedUpdate = ['name', 'age', 'email', 'password' ]
-    const isValidoperation = updates.every((update)=> allowedUpdate.includes(update))
-    
-    if(!isValidoperation){
-        return res.status(400).send({err:"invalid updates"})
+    const allowedUpdate = ['name', 'age', 'email', 'password']
+    const isValidoperation = updates.every((update) => allowedUpdate.includes(update));
+
+    if (!isValidoperation) {
+        return res.status(400).send({
+            err: "invalid updates"
+        });
     }
     try {
-        // const user = await User.findById(req.params.id)
         updates.forEach(update => req.user[update] = req.body[update])
-        const salt = await bcrypt.genSalt(10);  
-        req.user.password = await bcrypt.hash(req.user.password , salt);
-       
-        await req.user.save()
-        console.log(req.user)
-        // const user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true, runValidators:true})
-        // if (!user) {
-        //      return res.status(404).send()
-        // }
-        res.send(req.user)
+        const salt = await bcrypt.genSalt(10);
+        req.user.password = await bcrypt.hash(req.user.password, salt);
+        await req.user.save();
+        res.send(req.user);
     } catch (e) {
-        res.status(400).send(e)
+        res.status(400).send(e);
+        console.log(e);
     }
 })
 
-router.delete('/me',auth,  async (req, res)=>{
-
+router.delete('/me', auth, async (req, res) => {
     try {
-   
-        // const user = await User.findByIdAndDelete(req.user._id)
-        // if(!user){
-        //     res.status(404).send('user not found')
-        // }
-        // res.send(user)
-        await req.user.remove()
-        res.send(req.user)
-       
+        await req.user.remove();
+        res.send(req.user);
     } catch (e) {
+        res.status(500).send(e);
         console.log(e)
-        res.status(500).send()
     }
 })
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public' );
+        cb(null, './public');
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' +file.originalname )
+        cb(null, Date.now() + '-' + file.originalname)
     }
 });
 
@@ -127,12 +115,18 @@ var upload = multer({
         }
     }
 });
-router.put('/me/profileImg', auth ,  upload.single('img'), async (req, res, next) => {
-    const link = req.protocol + '://' + req.get('host')
+router.put('/me/profileImg', auth, upload.single('img'), async (req, res, next) => {
+
+    try {
+        const link = req.protocol + '://' + req.get('host')
         req.user.img = link + '/public/' + req.file.filename;
         await req.user.save()
         res.send(req.user)
+    } catch (e) {
+        res.status(500).send(e);
+        console.log(e)
+    }
 })
 
 
-module.exports = router ;
+module.exports = router;

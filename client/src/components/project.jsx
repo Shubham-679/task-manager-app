@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { findProject, updateProject } from "../actions/projectAction";
 import { addTask, getTasks } from "../actions/taskAction";
 import { getUser } from "../actions/userAction";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
-import Input from "./input"
+import Input from "./input";
+import UserTable from "./userTable";
+import _ from 'lodash';
+import SearchBox from "./searchBox";
 
 const token = localStorage.getItem("x-auth-token");
-
+const initialSort = {path : 'description' , order : 'asc'}
 const Project = (props) => {
   const dispatch = useDispatch();
   const [projectValues, setProjectValues] = useState([{}]);
@@ -16,6 +19,10 @@ const Project = (props) => {
   const [users, setUser] = useState([]);
   const [tasks, setTask] = useState([]);
   const [errors, setErrors] = useState({});
+  const [ sortColumn, setSortColumn] = useState(initialSort);
+  const [ searchQuery, setSearchQuery] = useState('')
+  console.log(searchQuery)
+  
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -24,13 +31,19 @@ const Project = (props) => {
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
-
-  useEffect(() => {
+  
+  useLayoutEffect(()=> {
     const projectId = props.match.params.id;
     dispatch(findProject(projectId, token)).then((res) => setProjectValues(res));
     dispatch(getUser(token)).then((res) => setUser(res));
     dispatch(getTasks(projectId, token)).then((res) => setTask(res));
-  }, [dispatch, props.match.params.id]);
+  },[dispatch, props.match.params.id])
+
+  useEffect(() => {
+    const filtered = tasks.filter((m) =>
+        m.description.toLowerCase().startsWith(searchQuery.toLowerCase()));
+        setTask(filtered)
+  }, [searchQuery]);
 
   const validateProperty = (name, value) => {
     if (name === "title") {
@@ -110,6 +123,23 @@ const Project = (props) => {
     });
     setValues({task:'', user:''})
     handleClose1()
+  };
+
+  const handleSort = (path) => {
+    const sortColumns = {...sortColumn}
+    if (sortColumns.path === path) {
+      sortColumns.order = sortColumns.order === "asc" ? "desc" : "asc";
+    } else {
+      sortColumns.path = path;
+      sortColumns.order = "asc";
+    }
+    setSortColumn(sortColumns)
+    const sorted = _.orderBy(tasks, [sortColumns.path], [sortColumns.order])
+    setTask(sorted);
+  }
+ 
+  const handleSearch = (query) => {
+    setSearchQuery(query)
   };
 
   return (
@@ -258,20 +288,13 @@ const Project = (props) => {
             </Modal>
           </div>
           <div className="container">
+          <SearchBox value={searchQuery} onChange={handleSearch} />
+             <UserTable
+             tasks={tasks}
+             onSort={handleSort}
+             sortColumn = {sortColumn}
+             />
             <div className="row social-icons" style={{ marginLeft: "100px" }}>
-              {tasks.map((task) => (
-                <div
-                  className="col-sm-5 card text-white bg-dark mb-3 m-2"
-                  key={task._id}
-                >
-                  <h3 className="card-title mt-3">{task.owner.name}</h3>
-                  <div className="card-header">Task : {task.description}</div>
-                  <Link
-                    to={`/updatetask/${task._id}`}
-                    className="stretched-link"
-                  ></Link>
-                </div>
-              ))}
             </div>
           </div>
           </React.Fragment>
