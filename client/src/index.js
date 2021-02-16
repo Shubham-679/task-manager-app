@@ -8,6 +8,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import 'font-awesome/css/font-awesome.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 

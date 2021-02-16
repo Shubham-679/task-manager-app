@@ -1,29 +1,35 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { findProject, updateProject } from "../actions/projectAction";
-import { addTask, getTasks } from "../actions/taskAction";
-import { getUser } from "../actions/userAction";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
+import _ from 'lodash';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import { getUser } from "../actions/userAction";
+import { findProject, updateProject } from "../actions/projectAction";
+import { addTask, getTasks } from "../actions/taskAction";
 import Input from "./input";
 import UserTable from "./userTable";
-import _ from 'lodash';
 import SearchBox from "./searchBox";
 
 const token = localStorage.getItem("x-auth-token");
-const initialSort = {path : 'description' , order : 'asc'}
 const Project = (props) => {
+
   const dispatch = useDispatch();
   const [projectValues, setProjectValues] = useState([{}]);
-  const [values, setValues] = useState({task:'', user:''});
+  const [values, setValues] = useState({ task: '', user: ''});
   const [users, setUser] = useState([]);
   const [tasks, setTask] = useState([]);
   const [errors, setErrors] = useState({});
-  const [ sortColumn, setSortColumn] = useState(initialSort);
-  const [ searchQuery, setSearchQuery] = useState('')
-  console.log(searchQuery)
-  
+  const [sortColumn, setSortColumn] = useState({ path: 'description', order: 'asc' });
+  const [searchQuery, setSearchQuery] = useState('')
+  const [date, setDate] = useState(moment().toDate())
 
+  const isWeekday = date => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6;
+  };
+  
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -31,18 +37,21 @@ const Project = (props) => {
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
-  
-  useLayoutEffect(()=> {
+
+  useLayoutEffect(() => {
     const projectId = props.match.params.id;
     dispatch(findProject(projectId, token)).then((res) => setProjectValues(res));
     dispatch(getUser(token)).then((res) => setUser(res));
     dispatch(getTasks(projectId, token)).then((res) => setTask(res));
-  },[dispatch, props.match.params.id])
+  }, [dispatch, props.match.params.id])
 
   useEffect(() => {
-    const filtered = tasks.filter((m) =>
+    if (searchQuery !== "") {
+      let filtered = props.tasks.filter((m) =>
         m.description.toLowerCase().startsWith(searchQuery.toLowerCase()));
-        setTask(filtered)
+      setTask(filtered)
+    }
+    if (searchQuery === "") setTask(props.tasks)
   }, [searchQuery]);
 
   const validateProperty = (name, value) => {
@@ -112,21 +121,28 @@ const Project = (props) => {
     });
   };
 
+  const handleDateInput = (date) => {
+    if(!date) return 
+    setDate(date)
+  }
+
   const handleSubmitTask = (e) => {
     e.preventDefault();
     const er = validateTask();
     setErrors((errors) => er || {});
     if (er) return;
     const projectId = props.match.params.id;
-    dispatch(addTask(values, projectId, token)).then((res) => {
+    const formattedDate = moment(date).format('ll')
+    const valuesWithDate = { ...values, formattedDate}
+    dispatch(addTask(valuesWithDate, projectId, token)).then((res) => {
       setTask((tasks) => [res, ...tasks]);
     });
-    setValues({task:'', user:''})
+    setValues({ task: '', user: '' })
     handleClose1()
   };
 
   const handleSort = (path) => {
-    const sortColumns = {...sortColumn}
+    const sortColumns = { ...sortColumn }
     if (sortColumns.path === path) {
       sortColumns.order = sortColumns.order === "asc" ? "desc" : "asc";
     } else {
@@ -137,9 +153,9 @@ const Project = (props) => {
     const sorted = _.orderBy(tasks, [sortColumns.path], [sortColumns.order])
     setTask(sorted);
   }
- 
-  const handleSearch = (query) => {
-    setSearchQuery(query)
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.currentTarget.value)
   };
 
   return (
@@ -195,7 +211,7 @@ const Project = (props) => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="Password" className="form-label">
+                    <label htmlFor="Description" className="form-label">
                       Description
                     </label>
                     <textarea
@@ -207,10 +223,10 @@ const Project = (props) => {
                       className="form-control"
                     />
                     <div>
-                  {errors.description && (
-                    <small className="text-danger">{errors.description}</small>
-                  )}
-                </div>
+                      {errors.description && (
+                        <small className="text-danger">{errors.description}</small>
+                      )}
+                    </div>
                   </div>
                   <div className="mb-3">
                     <Button
@@ -246,8 +262,8 @@ const Project = (props) => {
                       className="form-control"
                     />
                     {errors.task && (
-                    <small className="text-danger">{errors.task}</small>
-                  )}
+                      <small className="text-danger">{errors.task}</small>
+                    )}
                   </div>
                   <div className="mb-3">
                     <label htmlFor="User" className="form-label">
@@ -269,11 +285,29 @@ const Project = (props) => {
                       ))}
                     </select>
                     <div>
-                  {errors.user && (
-                    <small className="text-danger">{errors.user}</small>
-                  )}
-                </div>
+                      {errors.user && (
+                        <small className="text-danger">{errors.user}</small>
+                      )}
+                    </div>
                   </div>
+                  <div className="mb-3">
+                    <label htmlFor="Date">Deadline Date</label>
+                    <br></br>
+                    <DatePicker
+                      selected={date}
+                      onChange={handleDateInput}
+                      name="date"
+                      id="date"
+                      label="Date"
+                      minDate={new Date()}
+                      filterDate={isWeekday}
+                    />
+                  </div>
+                  <div>
+                      {errors.date && (
+                        <small className="text-danger">{errors.date}</small>
+                      )}
+                    </div>
                   <div className="mb-3">
                     <Button
                       variant="primary"
@@ -288,16 +322,16 @@ const Project = (props) => {
             </Modal>
           </div>
           <div className="container">
-          <SearchBox value={searchQuery} onChange={handleSearch} />
-             <UserTable
-             tasks={tasks}
-             onSort={handleSort}
-             sortColumn = {sortColumn}
-             />
+            <SearchBox value={searchQuery} onChange={handleSearch} />
+            <UserTable
+              tasks={tasks}
+              onSort={handleSort}
+              sortColumn={sortColumn}
+            />
             <div className="row social-icons" style={{ marginLeft: "100px" }}>
             </div>
           </div>
-          </React.Fragment>
+        </React.Fragment>
       )}
     </div>
   );
@@ -305,6 +339,7 @@ const Project = (props) => {
 
 const mapStateToProps = (state) => ({
   users: state.users,
+  tasks: state.tasks
 });
 
 export default withRouter(connect(mapStateToProps)(Project));

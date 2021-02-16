@@ -3,7 +3,6 @@ const User = require("../model/userModel");
 
 module.exports = async function (req, res, next) {
 
-  console.log(req.header("x-auth-token"))
   const token = req.header("x-auth-token");
   // const token = req.header('x-auth-token').split('Bearer ','')
   // const token = req.header('Authorization').replace('Bearer ','')
@@ -14,7 +13,7 @@ module.exports = async function (req, res, next) {
     // req.user = decoded;
     const user = await User.findOne({_id: decoded._id,"tokens.token": token});
     if (!user) {
-      throw new Error();
+      throw new Error('User Not Found');
     }
     req.token = token;
     req.user = user;

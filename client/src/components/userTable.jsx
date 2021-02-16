@@ -11,7 +11,8 @@ const UserTable = ({ tasks, onSort}) => {
               <th onClick={()=> onSort('description')}>Description</th>
               <th onClick={()=> onSort('status')}>Status</th>
               <th onClick={()=> onSort('owner.name')}>Assigned To</th>
-              <th onClick={()=> onSort('createdAt')}>Created At</th>
+              <th onClick={()=> onSort('createdAt')}>Assigned Date</th>
+              <th onClick={()=> onSort('deadline')}>Deadline</th>
             </tr>
           </thead>
           <tbody>
@@ -22,6 +23,7 @@ const UserTable = ({ tasks, onSort}) => {
                 <td>{task.status}</td>
                 <td>{task.owner.name}</td>
                 <td>{task.createdAt}</td>
+                <td>{task.deadline}</td>
               </tr>
             ))}
           </tbody>

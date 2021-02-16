@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const taskSchema = new mongoose.Schema({
   description: {
@@ -24,9 +25,14 @@ const taskSchema = new mongoose.Schema({
     required: true,
     ref: 'Project'
   },
-  createdAt : {
-    type : Date,
-    default : Date.now()
+  createdAt: {
+    type: String,
+    default: moment().format('ll'),
+    required : true
+  },
+  deadline: {
+    type: String,
+    required : true
   }
 })
 
