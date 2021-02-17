@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { getTaskById, updateTask, removeTask } from "../actions/taskAction";
 import { Button, Modal } from "react-bootstrap";
-import { getUser } from "../actions/userAction";
 import { Redirect } from "react-router-dom";
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import { getUser } from "../actions/userAction";
 
 
 const token = localStorage.getItem("x-auth-token");
@@ -19,6 +21,7 @@ const UpdateTask = (props) => {
   const [values, setValues] = useState({task:"",user:""});
   const [users, setUser] = useState([]);
   const [errors, setErrors] = useState({});
+  const [date, setDate] = useState(moment().toDate()) 
  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -51,12 +54,24 @@ const UpdateTask = (props) => {
     });
   };
 
+  const isWeekday = date => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6;
+  };
+  const handleDateInput = (date) => {
+    if(!date) return 
+    setDate(date)
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const er = validate();
     setErrors((errors) => er || {});
     if (er) return;
-    dispatch(updateTask(values,token, props.match.params.id));
+    const formattedDate = moment(date).format('ll')
+    const valuesWithDate = { ...values, formattedDate}
+    console.log(valuesWithDate)
+    dispatch(updateTask(valuesWithDate,token, props.match.params.id));
     setValues({task:'', user:''})
     handleClose()
   };
@@ -122,6 +137,19 @@ const UpdateTask = (props) => {
                 </div>
                 </div>
                 <div className="mb-3">
+                    <label htmlFor="Date">Deadline Date</label>
+                    <br></br>
+                    <DatePicker
+                      selected={date}
+                      onChange={handleDateInput}
+                      name="date"
+                      id="date"
+                      label="Date"
+                      minDate={new Date()}
+                      filterDate={isWeekday}
+                    />
+                  </div>
+                <div className="mb-3">
                   <Button variant="primary" type="submit" onClick={handleSubmit}>
                     Submit
                   </Button>
@@ -129,16 +157,19 @@ const UpdateTask = (props) => {
               </form>
             </Modal.Body>
           </Modal>
-          <div className="container mt-5">
+          <div className="container-fluid mt-5">
             <ul className="list-group">
               {props.tasks.map((task) => (
                 <li className="list-group-item" key={task._id}>
                   <div className="row">
-                    <h5 className="col-5 text-left">{task.description}</h5>
+                    <h5 className="col-4 text-left">{task.description}</h5>
                     <p className="col-2">User : {task.owner.name}</p>
                     <p className="col-2">Status : {task.status}</p>
-                    <div className="col-2 text-right">
-                    <Button className="btn" variant="primary" onClick={handleShow}>Update</Button>
+                    <p className="col-2">Deadline : {task.deadline}</p>
+                    <div className="col-1 text-right">
+                      <i className="fa fa-pencil-square-o" aria-hidden="true"
+                       onClick={handleShow}
+                      style={{ cursor: "pointer"}}></i>
                     </div>
                     <div className=" col-1 text-right">
                         <i className="fa fa-trash" aria-hidden="true" 

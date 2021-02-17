@@ -21,20 +21,15 @@ const Project = (props) => {
   const [users, setUser] = useState([]);
   const [tasks, setTask] = useState([]);
   const [errors, setErrors] = useState({});
-  const [sortColumn, setSortColumn] = useState({ path: 'description', order: 'asc' });
+  const [sortColumn, setSortColumn] = useState({ path: '', order: '' });
   const [searchQuery, setSearchQuery] = useState('')
-  const [date, setDate] = useState(moment().toDate())
-
-  const isWeekday = date => {
-    const day = date.getDay();
-    return day !== 0 && day !== 6;
-  };
-  
+  const [date, setDate] = useState(moment().toDate())  
   const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
 
@@ -120,7 +115,11 @@ const Project = (props) => {
       [name]: value,
     });
   };
-
+  
+  const isWeekday = date => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6;
+  };
   const handleDateInput = (date) => {
     if(!date) return 
     setDate(date)
@@ -141,16 +140,9 @@ const Project = (props) => {
     handleClose1()
   };
 
-  const handleSort = (path) => {
-    const sortColumns = { ...sortColumn }
-    if (sortColumns.path === path) {
-      sortColumns.order = sortColumns.order === "asc" ? "desc" : "asc";
-    } else {
-      sortColumns.path = path;
-      sortColumns.order = "asc";
-    }
-    setSortColumn(sortColumns)
-    const sorted = _.orderBy(tasks, [sortColumns.path], [sortColumns.order])
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn)
+    const sorted = _.orderBy(tasks, [sortColumn.path], [sortColumn.order])
     setTask(sorted);
   }
 

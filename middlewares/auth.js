@@ -4,9 +4,6 @@ const User = require("../model/userModel");
 module.exports = async function (req, res, next) {
 
   const token = req.header("x-auth-token");
-  // const token = req.header('x-auth-token').split('Bearer ','')
-  // const token = req.header('Authorization').replace('Bearer ','')
-  console.log(token)
   if (!token) return res.status(401).send("Access Denied : No Token Provided");
   try {
     const decoded = jwt.verify(token, "hellohowareyou");

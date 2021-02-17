@@ -107,7 +107,8 @@ router.put('/task/:id', auth, async (req, res) => {
       owner: {
         _id: user._id,
         name: user.name
-      }
+      },
+      deadline : req.body.formattedDate
     }, {
       new: true,
       runValidators: true
