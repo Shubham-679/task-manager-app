@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const addTask = (obj, projectId, token) => async (dispatch) => {
  const obj1 ={...obj, projectId}
-    const {data: newTask} = await axios.post("http://localhost:3000/tasks",obj1, {
+    const {data: newTask} = await axios.post("/tasks",obj1, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -14,7 +14,7 @@ export const addTask = (obj, projectId, token) => async (dispatch) => {
   };
   
   export const getTasks = (projectId, token) => async (dispatch) => {
-    const {data: tasks} = await axios.get("http://localhost:3000/tasks/"+ projectId, {
+    const {data: tasks} = await axios.get("/tasks/"+ projectId, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -25,7 +25,7 @@ export const addTask = (obj, projectId, token) => async (dispatch) => {
   };
   
   export const getTaskById = (taskId, token) => async (dispatch) => {
-    const {data: task} = await axios.get("http://localhost:3000/tasks/task/"+ taskId,{
+    const {data: task} = await axios.get("/tasks/task/"+ taskId,{
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -36,7 +36,7 @@ export const addTask = (obj, projectId, token) => async (dispatch) => {
   };
 
   export const getUserTasks = (userId, token) => async (dispatch) => {
-    const {data: tasks} = await axios.get("http://localhost:3000/tasks/users/"+ userId, {
+    const {data: tasks} = await axios.get("/tasks/users/"+ userId, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -47,7 +47,7 @@ export const addTask = (obj, projectId, token) => async (dispatch) => {
   };
   
   export const updateTask = (task,token, id) => async (dispatch) => {
-    const {data : tasks} = await axios.put("http://localhost:3000/tasks/task/" + id, task, {
+    const {data : tasks} = await axios.put("/tasks/task/" + id, task, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -58,7 +58,7 @@ export const addTask = (obj, projectId, token) => async (dispatch) => {
   };
   
   export const toggleTask = (task, token) => async (dispatch) => {
-    await axios.patch("http://localhost:3000/tasks/" + task._id, task, {
+    await axios.patch("/tasks/" + task._id, task, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -70,7 +70,7 @@ export const addTask = (obj, projectId, token) => async (dispatch) => {
 
 
   export const removeTask = (taskId, token) => async (dispatch) => {
-    const {data: tasks} = await axios.delete("http://localhost:3000/tasks/" + taskId, {
+    const {data: tasks} = await axios.delete("/tasks/" + taskId, {
       headers: {"x-auth-token": token},
     });
     console.log(tasks)
