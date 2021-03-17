@@ -43,7 +43,7 @@ const Project = (props) => {
   useEffect(() => {
     if (searchQuery !== "") {
       let filtered = props.tasks.filter((m) =>
-        m.description.toLowerCase().startsWith(searchQuery.toLowerCase()));
+        m.description.toLowerCase().includes(searchQuery.toLowerCase()));
       setTask(filtered)
     }
     if (searchQuery === "") setTask(props.tasks)

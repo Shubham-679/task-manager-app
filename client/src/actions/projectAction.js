@@ -3,7 +3,7 @@ import axios from "axios";
 // http://localhost:3000
 
 export const addProject = (values, token) => async (dispatch) => {
-    const {data: newProject} = await axios.post("/projects",values, {
+    const {data: newProject} = await axios.post("http://localhost:3000/projects",values, {
         headers: {"x-auth-token": token},
       });
     dispatch({
@@ -13,7 +13,7 @@ export const addProject = (values, token) => async (dispatch) => {
   };
   
   export const getProjects = (token) => async (dispatch) => {
-    const {data: project} = await axios.get("/projects", {
+    const {data: project} = await axios.get("http://localhost:3000/projects", {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -24,7 +24,7 @@ export const addProject = (values, token) => async (dispatch) => {
   
   
   export const updateProject = (values, token) => async (dispatch) => {
-    const { data : project} = await axios.put("/projects" , values, {
+    const { data : project} = await axios.put("http://localhost:3000/projects" , values, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -36,7 +36,7 @@ export const addProject = (values, token) => async (dispatch) => {
   
   
   export const removeProject = (projectId, token) => async (dispatch) => {
-    const {data: projects} = await axios.delete("/projects/" + projectId, {
+    const {data: projects} = await axios.delete("http://localhost:3000/projects/" + projectId, {
       headers: {"x-auth-token": token},
     });
     dispatch({
@@ -46,7 +46,7 @@ export const addProject = (values, token) => async (dispatch) => {
   };
   
   export const findProject = (projectId, token) => async (dispatch) => {
-    const {data: project} = await axios.get("/projects/" + projectId, {
+    const {data: project} = await axios.get("http://localhost:3000/projects/" + projectId, {
       headers: {"x-auth-token": token},
     });
     dispatch({
